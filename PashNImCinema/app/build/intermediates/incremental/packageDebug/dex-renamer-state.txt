@@ -1,7 +1,0 @@
-#Sat Jun 10 21:41:30 IDT 2017
-base.0=C\:\\Git_Android\\Nimrod_Pasha\\PashNImCinema\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_28d3ca8f96ce2d990312bb04b6191bbe41fb9fcc
-renamed.1=classes2.dex
-renamed.0=classes.dex
-file.1=C\:\\Git_Android\\Nimrod_Pasha\\PashNImCinema\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_d6030c60fbbabe6208614b3796ff1a8152b73cb0\\classes.dex
-base.1=C\:\\Git_Android\\Nimrod_Pasha\\PashNImCinema\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_d6030c60fbbabe6208614b3796ff1a8152b73cb0
-file.0=C\:\\Git_Android\\Nimrod_Pasha\\PashNImCinema\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_28d3ca8f96ce2d990312bb04b6191bbe41fb9fcc\\classes.dex
