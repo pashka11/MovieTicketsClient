@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 /**
- * Created by Nimrod on 13/06/2017. 55
+ * Created by Nimrod on 13/06/2017.
  */
 
 public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Adapter<MoviesAdapterViewHolder>
@@ -20,8 +20,7 @@ public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Ad
     @Override
     public void onBindViewHolder(MoviesAdapterViewHolder holder, int position)
     {
-        // Here we get the item number "position" in the list we saved,
-        // we will have an array with the movies retrieved with AsyncHttpClient
+        holder.bind(position);
     }
 
     @Override

@@ -25,4 +25,9 @@ public class MoviesAdapterViewHolder extends RecyclerView.ViewHolder
 
     }
 
+    public void bind(int num)
+    {
+        m_movieDescription.setText(String.valueOf(num));
+    }
+
 }
