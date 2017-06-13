@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 /**
- * Created by Nimrod on 13/06/2017.
+ * Created by Nimrod on 13/06/2017.   4444
  */
 
 public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Adapter<MoviesAdapterViewHolder>
