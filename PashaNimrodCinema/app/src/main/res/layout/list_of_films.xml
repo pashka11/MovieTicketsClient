@@ -8,11 +8,9 @@
     android:layout_gravity="center"
     app:cardCornerRadius="4dp">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <ImageView
             android:id="@+id/image_fast"
             android:layout_width="130dp"
@@ -22,7 +20,6 @@
             android:layout_alignParentTop="true"
             android:layout_gravity="end"
             android:src="@drawable/img" />
-
         <TextView
             android:id="@+id/text_fast"
             android:layout_width="wrap_content"

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PashNImCinema.iml" filepath="$PROJECT_DIR$/PashNImCinema.iml" />
       <module fileurl="file://$PROJECT_DIR$/PashaNimrodCinema.iml" filepath="$PROJECT_DIR$/PashaNimrodCinema.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

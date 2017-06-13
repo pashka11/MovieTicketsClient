@@ -1,4 +1,4 @@
-package com.example.pasha.pashnimcinema;
+package com.javaproject.pashnim.cinema;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

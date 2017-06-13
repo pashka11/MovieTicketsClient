@@ -1,4 +1,4 @@
-package com.example.pasha.pashnimcinema;
+package com.javaproject.pashnim.cinema;
 
 import org.junit.Test;
 

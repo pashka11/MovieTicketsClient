@@ -1,4 +1,4 @@
-package com.example.pasha.pashnimcinema;
+package com.javaproject.pashnim.cinema;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -19,30 +19,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
+        inflater.inflate(R.menu.menu_main_page,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId())
+        {
             case R.id.home:
-                Toast.makeText(MainActivity.this,"HOME",Toast.LENGTH_SHORT).show();
+            {
+                Toast.makeText(MainActivity.this, "HOME", Toast.LENGTH_SHORT).show();
                 Intent goToNextActivity = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(goToNextActivity);
-                return true;
-            case R.id.admin:
-                Toast.makeText(MainActivity.this,"Admin",Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.moviedetails:
-                Intent goToMoviedetails = new Intent(MainActivity.this, MovieDetails.class);
-                startActivity(goToMoviedetails);
-                return true;
 
+                break;
+            }
+            case R.id.admin:
+            {
+                Toast.makeText(MainActivity.this, "Admin", Toast.LENGTH_SHORT).show();
+
+                break;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
+        return true;
     }
 
 }

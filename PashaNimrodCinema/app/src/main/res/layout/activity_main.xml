@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.pasha.pashnimcinema.MainActivity">
+    tools:context="com.javaproject.pashnim.cinema.MainActivity">
 
 
     <TextView
@@ -32,7 +32,7 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
@@ -49,7 +49,6 @@
         android:layout_marginLeft="13dp"
         android:layout_marginRight="13dp"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintVertical_bias="1.0"></android.support.v7.widget.RecyclerView>
-
+        app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>
