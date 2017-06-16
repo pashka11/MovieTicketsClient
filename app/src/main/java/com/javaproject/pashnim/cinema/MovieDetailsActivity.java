@@ -39,11 +39,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 startActivity(goToHome);
                 break;
             }
-            case R.id.admin:
-            {
-                Toast.makeText(MovieDetailsActivity.this, "Admin", Toast.LENGTH_SHORT).show();
-                break;
-            }
             default:
                 return super.onOptionsItemSelected(item);
         }

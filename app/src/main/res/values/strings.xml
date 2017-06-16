@@ -2,4 +2,5 @@
     <string name="app_name">PashNimCinema</string>
     <string name="mainTitle">Welcome to PashNim Cinema</string>
     <string name="management_action">Management</string>
+    <string name="refresh_action">Refresh</string>
 </resources>
