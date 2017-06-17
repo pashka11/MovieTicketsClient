@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.check:
             {
                 Toast.makeText(MainActivity.this, "Check Working", Toast.LENGTH_SHORT).show();
-                Intent goToNextActivity = new Intent(MainActivity.this, FilmDecription.class);
+                Intent goToNextActivity = new Intent(MainActivity.this, MoviesDescriptionActivity.class);
                 startActivity(goToNextActivity);
 
                 break;

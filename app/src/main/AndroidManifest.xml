@@ -31,7 +31,7 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.javaproject.pashnim.cinema.MainActivity" />
 
-        <activity android:name=".FilmDecription"
+        <activity android:name=".MoviesDescriptionActivity"
              ></activity>
 
     </application>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.javaproject.pashnim.cinema.FilmDecription">
+    tools:context="com.javaproject.pashnim.cinema.MoviesDescriptionActivity">
 
 
 
@@ -14,7 +14,7 @@
         android:layout_width="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/filmsecriptionIMG"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -24,17 +24,18 @@
 
 
         <TextView
+            android:id="@+id/Title"
             android:layout_width="240dp"
             android:layout_height="33dp"
             android:text="Title: Fast and Furious 8"
             android:textSize="12sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toStartOf="@+id/imageView" />
+            android:layout_toLeftOf="@+id/filmsecriptionIMG"
+            android:layout_toStartOf="@+id/filmsecriptionIMG" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/Year"
             android:layout_width="239dp"
             android:layout_height="33dp"
             android:text="Year: 2017"
@@ -43,75 +44,77 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="30dp"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toStartOf="@+id/imageView" />
+            android:layout_toLeftOf="@+id/filmsecriptionIMG"
+            android:layout_toStartOf="@+id/filmsecriptionIMG" />
 
         <TextView
+            android:id="@+id/Duration"
             android:layout_width="240dp"
             android:layout_height="33dp"
             android:text="Duration: 136 min"
             android:textSize="10sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="55dp"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toStartOf="@+id/imageView"/>
+            android:layout_toLeftOf="@+id/filmsecriptionIMG"
+            android:layout_toStartOf="@+id/filmsecriptionIMG"/>
 
 
         <TextView
-            android:id="@+id/genres"
+            android:id="@+id/Genres"
             android:layout_width="240dp"
             android:layout_height="33dp"
             android:text="Genres: Action, Thriller, Crime"
             android:textSize="10sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="80dp"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toStartOf="@+id/imageView"/>
+            android:layout_toLeftOf="@+id/filmsecriptionIMG"
+            android:layout_toStartOf="@+id/filmsecriptionIMG"/>
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/Director"
             android:layout_width="240dp"
             android:layout_height="40dp"
             android:text="Director: F. Gary Gray"
             android:textSize="10sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="105dp"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toStartOf="@+id/imageView"/>
+            android:layout_toLeftOf="@+id/filmsecriptionIMG"
+            android:layout_toStartOf="@+id/filmsecriptionIMG"/>
 
         <TextView
             android:layout_width="240dp"
             android:layout_height="33dp"
             android:text="Released By: Warner Bros"
             android:textSize="10sp"
-            android:id="@+id/textView5"
+            android:id="@+id/Released"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="130dp"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toStartOf="@+id/imageView"
+            android:layout_toLeftOf="@+id/filmsecriptionIMG"
+            android:layout_toStartOf="@+id/filmsecriptionIMG"
             />
 
         <TextView
+            android:id="@+id/Country"
             android:layout_width="240dp"
             android:layout_height="33dp"
             android:text="Country: United States"
             android:textSize="10sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="155dp"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toStartOf="@+id/imageView"/>
+            android:layout_toLeftOf="@+id/filmsecriptionIMG"
+            android:layout_toStartOf="@+id/filmsecriptionIMG"/>
 
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/Actors"
             android:layout_width="240dp"
             android:layout_height="60dp"
             android:text="Actors: Vin Diesel, Jason Statham, Dwayne Johnson, Michelle Rodriguez, Tyrese Gibson"
             android:textSize="10sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="180dp"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toStartOf="@+id/imageView"/>
+            android:layout_toLeftOf="@+id/filmsecriptionIMG"
+            android:layout_toStartOf="@+id/filmsecriptionIMG"/>
 
 
 
@@ -129,15 +132,6 @@
             android:layout_marginLeft="1dp"
             android:layout_marginTop="360dp"/>
 
-        <!--<Spinner-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/spin_date"-->
-            <!--android:entries="@array/Date_of_Screen"-->
-            <!--android:layout_below="@+id/Description"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_alignParentEnd="true">-->
-        <!--</Spinner>-->
 
         <EditText
             android:layout_width="wrap_content"

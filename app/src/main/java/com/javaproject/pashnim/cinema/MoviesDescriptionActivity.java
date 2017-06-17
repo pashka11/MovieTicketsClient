@@ -1,27 +1,20 @@
 package com.javaproject.pashnim.cinema;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
-import android.icu.util.Calendar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
 
 
-public class FilmDecription extends AppCompatActivity {
+public class MoviesDescriptionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.film_decription);
+        setContentView(R.layout.movie_decription);
 
 
         if (getSupportActionBar() != null) {
