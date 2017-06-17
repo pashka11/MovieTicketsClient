@@ -244,10 +244,10 @@ public class MainActivity extends AppCompatActivity {
     {
         switch (item.getItemId())
         {
-            case R.id.home:
+            case R.id.check:
             {
-                Toast.makeText(MainActivity.this, "HOME", Toast.LENGTH_SHORT).show();
-                Intent goToNextActivity = new Intent(MainActivity.this, MainActivity.class);
+                Toast.makeText(MainActivity.this, "Check Working", Toast.LENGTH_SHORT).show();
+                Intent goToNextActivity = new Intent(MainActivity.this, FilmDecription.class);
                 startActivity(goToNextActivity);
 
                 break;
