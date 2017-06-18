@@ -1,5 +1,6 @@
 package com.javaproject.pashnim.cinema.Objects;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by Nimrod on 15/06/2017.
  */
 
-public class MovieDetails
+public class MovieDetails implements Serializable
 {
     public MovieDetails()
     {

@@ -1,5 +1,7 @@
 package com.javaproject.pashnim.cinema;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.javaproject.pashnim.cinema.DisplayObjects.MovieView;
+import com.javaproject.pashnim.cinema.DisplayObjects.MovieDisplay;
 
 import java.util.List;
 
@@ -19,7 +21,14 @@ import java.util.List;
 
 public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Adapter<MoviesListAdapter.MoviesAdapterViewHolder>
 {
-    List<MovieView> m_moviesList;
+    List<MovieDisplay> m_moviesList;
+    Context m_context;
+    MovieClickedListener m_listener;
+
+    public MoviesListAdapter(MovieClickedListener listener)
+    {
+        m_listener = listener;
+    }
 
     @Override
     public MoviesAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType)
@@ -36,10 +45,10 @@ public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Ad
             holder.bind(m_moviesList.get(position));
         else
             Log.d("RecyclerView",
-                  "onBindViewHolder: Trying to bind position: " +
-                          position +
-                          "when data size is: " +
-                          m_moviesList.size());
+                    "onBindViewHolder: Trying to bind position: " +
+                            position +
+                            "when data size is: " +
+                            m_moviesList.size());
     }
 
     @Override
@@ -48,7 +57,7 @@ public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Ad
         return m_moviesList == null ? 0 : m_moviesList.size();
     }
 
-    public void SetData(List<MovieView> movies)
+    public void SetData(List<MovieDisplay> movies)
     {
         m_moviesList = movies;
 
@@ -75,14 +84,22 @@ public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Ad
             this.m_movieTitle = (TextView)view.findViewById(R.id.text_fast);
             this.m_moviePicture = (ImageView) view.findViewById(R.id.image_fast);
 
-            view.setClickable(true);
-
+            view.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    m_listener.OnMovieItemClicked(getAdapterPosition());
+                }
+            });
         }
 
-        public void bind(MovieView movie)
+        public void bind(final MovieDisplay movie)
         {
-            m_movieTitle.setText(String.valueOf(movie.MovieDetails.Name));
-            m_moviePicture.setImageBitmap(movie.MoviePicture);
+            m_movieTitle.setText(movie.MovieDetails.Name);
+
+            if (movie.MoviePicture != null)
+                m_moviePicture.setImageBitmap(movie.MoviePicture);
         }
 
     }

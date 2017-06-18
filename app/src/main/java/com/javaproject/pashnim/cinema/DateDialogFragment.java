@@ -14,11 +14,16 @@ import android.widget.EditText;
  * Created by Pasha on 17-Jun-17.
  */
 
-public class DateDialog extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+public class DateDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
 
     EditText txtDate;
 
-    public DateDialog(View view){
+    public DateDialogFragment()
+    {
+
+    }
+
+    public DateDialogFragment(View view){
         txtDate=(EditText)view;
     }
     public Dialog onCreateDialog(Bundle savedInstanceSate){

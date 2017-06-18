@@ -18,15 +18,15 @@ import retrofit2.http.Path;
 public interface MoviesServiceAPI
 {
     // Movies
-    @GET(WebApiConstants.Movies.BaseMoviesUrl)
+    @GET(WebApiConstants.Movies.RelativeUrl)
     Call<List<MovieDetails>> GetAllMovies();
 
     @GET(WebApiConstants.Movies.GetMovie)
     Call<MovieDetails> GetMovie(@Path(WebApiConstants.Movies.MovieId) int id);
 
-    @POST(WebApiConstants.Movies.BaseMoviesUrl)
+    @POST(WebApiConstants.Movies.RelativeUrl)
     Call<ResponseBody> AddMovie(@Body MovieDetails movie);
 
-    @GET(WebApiConstants.Images.GetImage)
+    @GET(WebApiConstants.Images.RelativeGetImage)
     Call<ResponseBody> GetMoviePicture(@Path(WebApiConstants.Images.ImageName) String name);
 }

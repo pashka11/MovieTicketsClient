@@ -23,7 +23,6 @@ public final class MoviesServiceFactory
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-            Log.e("tag", "before creating service");
             m_service = retrofit.create(MoviesServiceAPI.class);
         }
 

@@ -3,7 +3,6 @@ package com.javaproject.pashnim.cinema;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,12 +18,13 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.javaproject.pashnim.cinema.DisplayObjects.MovieView;
+import com.javaproject.pashnim.cinema.DisplayObjects.MovieDisplay;
 import com.javaproject.pashnim.cinema.Objects.MovieDetails;
 import com.javaproject.pashnim.cinema.WebInterfaces.MoviesServiceAPI;
 import com.javaproject.pashnim.cinema.WebInterfaces.MoviesServiceFactory;
+import com.javaproject.pashnim.cinema.WebInterfaces.WebApiConstants;
+import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,13 +41,17 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 
-public class MainActivity extends AppCompatActivity {
-
-    RecyclerView m_moviesList;
-    MoviesListAdapter m_moviesAdapter;
+public class MainActivity extends AppCompatActivity implements MovieClickedListener
+{
+    // Views
     ProgressBar m_progressBar;
+
+    // Variables
+    List<MovieDisplay>  m_movieDisplays;
+    MoviesListAdapter   m_moviesAdapter;
+    RecyclerView        m_moviesListRecyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +62,13 @@ public class MainActivity extends AppCompatActivity {
 
         m_progressBar = (ProgressBar) findViewById(R.id.pb_movies);
 
-        m_moviesAdapter = new MoviesListAdapter();
+        m_moviesAdapter = new MoviesListAdapter(this);
 
-        m_moviesList = (RecyclerView) findViewById(R.id.rv_movies);
-        m_moviesList.setAdapter(m_moviesAdapter);
-        m_moviesList.setLayoutManager(new GridLayoutManager(this, 2));
-        m_moviesList.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-        m_moviesList.setItemAnimator(new DefaultItemAnimator());
+        m_moviesListRecyclerView = (RecyclerView) findViewById(R.id.rv_movies);
+        m_moviesListRecyclerView.setAdapter(m_moviesAdapter);
+        m_moviesListRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        m_moviesListRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+        m_moviesListRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         ShowMoviesList();
     }
@@ -95,12 +99,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(@NonNull List<MovieDetails> moviesDetails)
             {
-                List<MovieView> movieViews = new ArrayList<>(moviesDetails.size());
+                m_movieDisplays = new ArrayList<>(moviesDetails.size());
 
                 for (MovieDetails movie : moviesDetails)
-                    movieViews.add(new MovieView(movie, null));
+                    m_movieDisplays.add(new MovieDisplay(movie, null));
 
-                m_moviesAdapter.SetData(movieViews);
+                m_moviesAdapter.SetData(m_movieDisplays);
 
                 LoadMoviesImages(moviesDetails);
 
@@ -122,28 +126,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void subscribe(@NonNull ObservableEmitter<MovieImageArrivedEvent> emitter) throws Exception
             {
-                MoviesServiceAPI movieService = MoviesServiceFactory.GetInstance();
-
                 for (int i = 0; i < movies.size(); i++)
                 {
                     final MovieDetails currentMovie = movies.get(i);
 
-                    // Fetching the movie image
-                    ResponseBody body = movieService.GetMoviePicture(currentMovie.ImageName).execute().body();
-
-                    byte[] imageBytes = new byte[0];
-
-                    try
-                    {
-                        imageBytes = body.bytes();
-                    } catch (IOException e)
-                    {
-                        emitter.onError(null);
-
-                        e.printStackTrace();
-                    }
-
-                    Bitmap movieImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                    Bitmap movieImage = Picasso
+                            .with(MainActivity.this)
+                            .load(WebApiConstants.Images.Url + "/" + currentMovie.ImageName)
+                            .get();
 
                     if (movieImage != null)
                         emitter.onNext(new MovieImageArrivedEvent(movieImage, i));
@@ -174,6 +164,25 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void OnMovieItemClicked(int position)
+    {
+        // Start a new activity if view was pressed
+        Intent intent = new Intent(this, MovieDescriptionActivity.class);
+
+        MovieDetails det = m_movieDisplays.get(position).MovieDetails;
+        Bitmap bit = m_movieDisplays.get(position).MoviePicture;
+
+        // TODO : This method starts a new activity with the movie selected, but there is a problem,
+        // When the image is too big it crushes, so we need to find another way to pass the data, maybe create an EventBus
+        // Or make the details page a fragment so it can access the data
+
+        intent.putExtra("movie", det);
+        intent.putExtra("pic", bit);
+
+        startActivity(intent);
+    }
+
     public class MovieImageArrivedEvent
     {
         public final Bitmap image;
@@ -185,51 +194,6 @@ public class MainActivity extends AppCompatActivity {
             this.position = position;
         }
     }
-
-//    public void LoadMovieImages(List<MovieDetails> movies)
-//    {
-//        List<MovieView> movieViews = new ArrayList<>(movies.size());
-//
-//        MoviesServiceAPI movieService = MoviesServiceFactory.GetInstance();
-//
-//        for (int i = 0; i < movies.size(); i++)
-//        {
-//            final MovieDetails currentMovie = movies.get(i);
-//            final int currentIndex = i;
-//
-//            // Fetching the movie image
-//            movieService.GetMoviePicture(currentMovie.ImageName).enqueue(new Callback<ResponseBody>()
-//            {
-//                @Override
-//                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
-//                {
-//                    ResponseBody body = response.body();
-//
-//                    byte[] imageBytes = new byte[0];
-//                    try
-//                    {
-//                        imageBytes = body.bytes();
-//                    } catch (IOException e)
-//                    {
-//                        e.printStackTrace();
-//                    }
-//
-//                    Bitmap movieImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-//
-//                    if (movieImage != null)
-//                        m_moviesAdapter.SetImageAt(movieImage, currentIndex);
-//                    else
-//                        Log.d("Movies", "Failed loading image of movie: " + currentMovie.Name);
-//                }
-//
-//                @Override
-//                public void onFailure(Call<ResponseBody> call, Throwable t)
-//                {
-//
-//                }
-//            });
-//        }
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -247,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.check:
             {
                 Toast.makeText(MainActivity.this, "Check Working", Toast.LENGTH_SHORT).show();
-                Intent goToNextActivity = new Intent(MainActivity.this, MoviesDescriptionActivity.class);
+                Intent goToNextActivity = new Intent(MainActivity.this, MovieDescriptionActivity.class);
                 startActivity(goToNextActivity);
 
                 break;

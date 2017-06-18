@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.javaproject.pashnim.cinema.MoviesDescriptionActivity">
-
-
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             tools:context="com.javaproject.pashnim.cinema.MovieDescriptionActivity">
 
     <RelativeLayout
         android:id="@+id/film_description"
@@ -14,7 +11,7 @@
         android:layout_width="wrap_content">
 
         <ImageView
-            android:id="@+id/filmsecriptionIMG"
+            android:id="@+id/iv_movie_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -22,17 +19,16 @@
             android:layout_alignParentTop="true"
             android:src="@drawable/img" />
 
-
         <TextView
-            android:id="@+id/Title"
+            android:id="@+id/tv_movie_title"
             android:layout_width="240dp"
             android:layout_height="33dp"
             android:text="Title: Fast and Furious 8"
             android:textSize="12sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@+id/filmsecriptionIMG"
-            android:layout_toStartOf="@+id/filmsecriptionIMG" />
+            android:layout_toLeftOf="@+id/iv_movie_image"
+            android:layout_toStartOf="@+id/iv_movie_image" />
 
         <TextView
             android:id="@+id/Year"
@@ -44,31 +40,30 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="30dp"
-            android:layout_toLeftOf="@+id/filmsecriptionIMG"
-            android:layout_toStartOf="@+id/filmsecriptionIMG" />
+            android:layout_toLeftOf="@+id/iv_movie_image"
+            android:layout_toStartOf="@+id/iv_movie_image" />
 
         <TextView
-            android:id="@+id/Duration"
+            android:id="@+id/tv_movie_duration"
             android:layout_width="240dp"
             android:layout_height="33dp"
             android:text="Duration: 136 min"
             android:textSize="10sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="55dp"
-            android:layout_toLeftOf="@+id/filmsecriptionIMG"
-            android:layout_toStartOf="@+id/filmsecriptionIMG"/>
-
+            android:layout_toLeftOf="@+id/iv_movie_image"
+            android:layout_toStartOf="@+id/iv_movie_image"/>
 
         <TextView
-            android:id="@+id/Genres"
+            android:id="@+id/tv_movie_genre"
             android:layout_width="240dp"
             android:layout_height="33dp"
             android:text="Genres: Action, Thriller, Crime"
             android:textSize="10sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="80dp"
-            android:layout_toLeftOf="@+id/filmsecriptionIMG"
-            android:layout_toStartOf="@+id/filmsecriptionIMG"/>
+            android:layout_toLeftOf="@+id/iv_movie_image"
+            android:layout_toStartOf="@+id/iv_movie_image"/>
 
         <TextView
             android:id="@+id/Director"
@@ -78,8 +73,8 @@
             android:textSize="10sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="105dp"
-            android:layout_toLeftOf="@+id/filmsecriptionIMG"
-            android:layout_toStartOf="@+id/filmsecriptionIMG"/>
+            android:layout_toLeftOf="@+id/iv_movie_image"
+            android:layout_toStartOf="@+id/iv_movie_image"/>
 
         <TextView
             android:layout_width="240dp"
@@ -89,9 +84,8 @@
             android:id="@+id/Released"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="130dp"
-            android:layout_toLeftOf="@+id/filmsecriptionIMG"
-            android:layout_toStartOf="@+id/filmsecriptionIMG"
-            />
+            android:layout_toLeftOf="@+id/iv_movie_image"
+            android:layout_toStartOf="@+id/iv_movie_image"/>
 
         <TextView
             android:id="@+id/Country"
@@ -101,9 +95,8 @@
             android:textSize="10sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="155dp"
-            android:layout_toLeftOf="@+id/filmsecriptionIMG"
-            android:layout_toStartOf="@+id/filmsecriptionIMG"/>
-
+            android:layout_toLeftOf="@+id/iv_movie_image"
+            android:layout_toStartOf="@+id/iv_movie_image"/>
 
         <TextView
             android:id="@+id/Actors"
@@ -113,11 +106,8 @@
             android:textSize="10sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="180dp"
-            android:layout_toLeftOf="@+id/filmsecriptionIMG"
-            android:layout_toStartOf="@+id/filmsecriptionIMG"/>
-
-
-
+            android:layout_toLeftOf="@+id/iv_movie_image"
+            android:layout_toStartOf="@+id/iv_movie_image"/>
 
         <TextView
             android:layout_width="240dp"

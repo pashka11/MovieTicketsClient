@@ -6,15 +6,16 @@ package com.javaproject.pashnim.cinema.WebInterfaces;
 
 public final class WebApiConstants
 {
-    public final static String BaseUrl = "http://10.100.102.12:8081/webapi/";
+    public final static String BaseUrl = "http://10.100.102.12:8081/api/";
 
     public final class Movies
     {
         public final static String MovieId = "id";
-        public final static String BaseMoviesUrl = "movies";
-        public final static String GetAllMovies = BaseMoviesUrl;
-        public final static String GetMovie = BaseMoviesUrl + "/{" + MovieId + "}";
-        public final static String GetMovieScreenings = BaseMoviesUrl + GetMovie + "/screenings";
+        public final static String RelativeUrl = "movies";
+        public final static String Url = BaseUrl + RelativeUrl;
+        public final static String GetAllMovies = RelativeUrl;
+        public final static String GetMovie = RelativeUrl + "/{" + MovieId + "}";
+        public final static String GetMovieScreenings = RelativeUrl + GetMovie + "/screenings";
     }
 
     public final class Screenings
@@ -25,8 +26,9 @@ public final class WebApiConstants
 
     public final class Images
     {
-        public final static String BaseImagesUrl = "images";
+        public final static String RelativeUrl = "images";
+        public final static String Url = BaseUrl  + RelativeUrl;
         public final static String ImageName = "name";
-        public final static String GetImage = BaseImagesUrl + "/{" + ImageName + "}";
+        public final static String RelativeGetImage = RelativeUrl + "/{" + ImageName + "}";
     }
 }

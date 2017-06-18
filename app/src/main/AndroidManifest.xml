@@ -23,17 +23,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MovieDetailsActivity"
-            android:parentActivityName=".MainActivity" />
-
-
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.javaproject.pashnim.cinema.MainActivity" />
-
-        <activity android:name=".MoviesDescriptionActivity"
-             ></activity>
+            android:name=".MovieDescriptionActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.javaproject.pashnim.cinema.MainActivity" />
+        </activity>
 
     </application>
-
 </manifest>
