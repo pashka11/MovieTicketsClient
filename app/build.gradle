@@ -52,6 +52,7 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'joda-time:joda-time:2.9.9'
+    compile 'com.wdullaer:materialdatetimepicker:3.2.2'
     testCompile 'junit:junit:4.12'
 }
 

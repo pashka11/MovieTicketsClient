@@ -203,14 +203,6 @@ public class MainActivity extends AppCompatActivity implements MovieClickedListe
     {
         switch (item.getItemId())
         {
-            case R.id.check:
-            {
-                Toast.makeText(MainActivity.this, "Check Working", Toast.LENGTH_SHORT).show();
-                Intent goToNextActivity = new Intent(MainActivity.this, MovieDescriptionActivity.class);
-                startActivity(goToNextActivity);
-
-                break;
-            }
             case R.id.admin_action:
             {
                 Toast.makeText(MainActivity.this, "Admin", Toast.LENGTH_SHORT).show();
