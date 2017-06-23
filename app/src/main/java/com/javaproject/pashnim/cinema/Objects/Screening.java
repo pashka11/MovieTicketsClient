@@ -1,6 +1,6 @@
 package com.javaproject.pashnim.cinema.Objects;
 
-import java.util.Date;
+import org.joda.time.LocalDateTime;
 
 /**
  * Created by Nimrod on 15/06/2017.
@@ -8,8 +8,14 @@ import java.util.Date;
 
 public class Screening
 {
-    Date ScreeningTime;
-    MovieDetails Movie;
-    int HallId;
-    int [][] Seats;
+    public Screening()
+    {
+
+    }
+
+    public LocalDateTime ScreeningTime;
+    public int MovieId;
+    public int HallId;
+    public int [][] Seats;
 }
+

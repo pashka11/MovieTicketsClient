@@ -31,7 +31,7 @@
             android:layout_toStartOf="@+id/iv_movie_image" />
 
         <TextView
-            android:id="@+id/Year"
+            android:id="@+id/tv_movie_year"
             android:layout_width="239dp"
             android:layout_height="33dp"
             android:text="Year: 2017"
@@ -66,7 +66,7 @@
             android:layout_toStartOf="@+id/iv_movie_image"/>
 
         <TextView
-            android:id="@+id/Director"
+            android:id="@+id/tv_movie_director"
             android:layout_width="240dp"
             android:layout_height="40dp"
             android:text="Director: F. Gary Gray"
@@ -77,29 +77,7 @@
             android:layout_toStartOf="@+id/iv_movie_image"/>
 
         <TextView
-            android:layout_width="240dp"
-            android:layout_height="33dp"
-            android:text="Released By: Warner Bros"
-            android:textSize="10sp"
-            android:id="@+id/Released"
-            android:layout_marginLeft="1dp"
-            android:layout_marginTop="130dp"
-            android:layout_toLeftOf="@+id/iv_movie_image"
-            android:layout_toStartOf="@+id/iv_movie_image"/>
-
-        <TextView
-            android:id="@+id/Country"
-            android:layout_width="240dp"
-            android:layout_height="33dp"
-            android:text="Country: United States"
-            android:textSize="10sp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginTop="155dp"
-            android:layout_toLeftOf="@+id/iv_movie_image"
-            android:layout_toStartOf="@+id/iv_movie_image"/>
-
-        <TextView
-            android:id="@+id/Actors"
+            android:id="@+id/tv_movie_actors"
             android:layout_width="240dp"
             android:layout_height="60dp"
             android:text="Actors: Vin Diesel, Jason Statham, Dwayne Johnson, Michelle Rodriguez, Tyrese Gibson"
@@ -114,7 +92,7 @@
             android:layout_height="110dp"
             android:text="Description: After Dom is recruited by a mysterious villainess hacker, he turns against his family and most importantly, goes on the wrong side of the law again. Now, the crew must unite to bring home the man who made them a family and stop her from unleashing chaos on a grand scale."
             android:textSize="15sp"
-            android:id="@+id/Description"
+            android:id="@+id/tv_movie_description"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
@@ -128,9 +106,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/txtdate"
             android:textSize="20sp"
-            android:hint="Screening Date "
+            android:hint="תאריך הקרנה "
             android:gravity="center"
-            android:layout_below="@+id/Description"
+            android:layout_below="@+id/tv_movie_description"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 

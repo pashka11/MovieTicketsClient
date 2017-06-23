@@ -81,17 +81,10 @@ public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Ad
         {
             super(view);
 
-            this.m_movieTitle = (TextView)view.findViewById(R.id.text_fast);
-            this.m_moviePicture = (ImageView) view.findViewById(R.id.image_fast);
+            this.m_movieTitle = (TextView)view.findViewById(R.id.tv_movie_desc_preview);
+            this.m_moviePicture = (ImageView) view.findViewById(R.id.iv_movie_image_preview);
 
-            view.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    m_listener.OnMovieItemClicked(getAdapterPosition());
-                }
-            });
+            view.setOnClickListener(v -> m_listener.OnMovieItemClicked(getAdapterPosition()));
         }
 
         public void bind(final MovieDisplay movie)

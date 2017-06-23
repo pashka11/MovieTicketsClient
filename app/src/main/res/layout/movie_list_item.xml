@@ -19,17 +19,17 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/image_fast"
+                android:id="@+id/iv_movie_image_preview"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/album_cover_height"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:scaleType="fitXY" />
             <TextView
-                android:id="@+id/text_fast"
+                android:id="@+id/tv_movie_desc_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/image_fast"
+                android:layout_below="@+id/iv_movie_image_preview"
                 android:paddingLeft="@dimen/movie_title_padding"
                 android:paddingRight="@dimen/movie_title_padding"
                 android:paddingTop="@dimen/movie_title_padding"

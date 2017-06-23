@@ -75,24 +75,19 @@ public class MainActivity extends AppCompatActivity implements MovieClickedListe
 
     public void ShowMoviesList()
     {
-        Single.create(new SingleOnSubscribe<List<MovieDetails>>()
+        Single.create((SingleOnSubscribe<List<MovieDetails>>) emitter ->
         {
-            @Override
-            public void subscribe(@NonNull SingleEmitter<List<MovieDetails>> emitter) throws Exception
-            {
-                final MoviesServiceAPI moviesService = MoviesServiceFactory.GetInstance();
+            final MoviesServiceAPI moviesService = MoviesServiceFactory.GetInstance();
 
-                emitter.onSuccess(moviesService.GetAllMovies().execute().body());
-            }
+            List<MovieDetails> result = moviesService.GetAllMovies().execute().body();
+
+            if (result != null)
+                emitter.onSuccess(result);
+            else
+                emitter.onError(null);
+
         }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).doOnSubscribe(
-                new Consumer<Disposable>()
-                {
-                    @Override
-                    public void accept(@NonNull Disposable disposable) throws Exception
-                    {
-                        m_progressBar.setVisibility(View.VISIBLE);
-                    }
-                }
+                disposable -> m_progressBar.setVisibility(View.VISIBLE)
         ).subscribeWith(new DisposableSingleObserver<List<MovieDetails>>()
         {
 
@@ -112,34 +107,34 @@ public class MainActivity extends AppCompatActivity implements MovieClickedListe
             }
 
             @Override
-            public void onError(@NonNull Throwable throwable)
+            public void onError(Throwable throwable)
             {
                 Log.d("Movies", "Error retrieving the movies");
+
+                m_progressBar.setVisibility(View.INVISIBLE);
+
+                Toast.makeText(MainActivity.this, "Failed Loading Movies", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void LoadMoviesImages(final List<MovieDetails> movies)
     {
-        Observable.create(new ObservableOnSubscribe<MovieImageArrivedEvent>()
+        Observable.create((ObservableOnSubscribe<MovieImageArrivedEvent>) emitter ->
         {
-            @Override
-            public void subscribe(@NonNull ObservableEmitter<MovieImageArrivedEvent> emitter) throws Exception
+            for (int i = 0; i < movies.size(); i++)
             {
-                for (int i = 0; i < movies.size(); i++)
-                {
-                    final MovieDetails currentMovie = movies.get(i);
+                final MovieDetails currentMovie = movies.get(i);
 
-                    Bitmap movieImage = Picasso
-                            .with(MainActivity.this)
-                            .load(WebApiConstants.Images.Url + "/" + currentMovie.ImageName)
-                            .get();
+                Bitmap movieImage = Picasso
+                        .with(MainActivity.this)
+                        .load(WebApiConstants.Images.Url + "/" + currentMovie.ImageName)
+                        .get();
 
-                    if (movieImage != null)
-                        emitter.onNext(new MovieImageArrivedEvent(movieImage, i));
-                    else
-                        emitter.onError(null);
-                }
+                if (movieImage != null)
+                    emitter.onNext(new MovieImageArrivedEvent(movieImage, i));
+                else
+                    emitter.onError(null);
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

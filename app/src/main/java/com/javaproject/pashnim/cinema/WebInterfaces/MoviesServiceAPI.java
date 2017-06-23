@@ -1,6 +1,7 @@
 package com.javaproject.pashnim.cinema.WebInterfaces;
 
 import com.javaproject.pashnim.cinema.Objects.MovieDetails;
+import com.javaproject.pashnim.cinema.Objects.Screening;
 
 import java.util.List;
 
@@ -29,4 +30,7 @@ public interface MoviesServiceAPI
 
     @GET(WebApiConstants.Images.RelativeGetImage)
     Call<ResponseBody> GetMoviePicture(@Path(WebApiConstants.Images.ImageName) String name);
+
+    @GET(WebApiConstants.Movies.GetMovieScreenings)
+    Call<List<Screening>> GetMovieScreenings(@Path(WebApiConstants.Movies.MovieId) int id);
 }

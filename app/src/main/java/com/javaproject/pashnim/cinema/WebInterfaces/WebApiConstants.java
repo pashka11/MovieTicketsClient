@@ -6,7 +6,7 @@ package com.javaproject.pashnim.cinema.WebInterfaces;
 
 public final class WebApiConstants
 {
-    public final static String BaseUrl = "http://10.100.102.12:8081/api/";
+    public final static String BaseUrl = "http://10.100.102.11:8081/api/";
 
     public final class Movies
     {
@@ -15,7 +15,7 @@ public final class WebApiConstants
         public final static String Url = BaseUrl + RelativeUrl;
         public final static String GetAllMovies = RelativeUrl;
         public final static String GetMovie = RelativeUrl + "/{" + MovieId + "}";
-        public final static String GetMovieScreenings = RelativeUrl + GetMovie + "/screenings";
+        public final static String GetMovieScreenings = GetMovie + "/screenings";
     }
 
     public final class Screenings
