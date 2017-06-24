@@ -1,7 +1,5 @@
 package com.javaproject.pashnim.cinema;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.javaproject.pashnim.cinema.DisplayObjects.MovieDisplay;
+import com.javaproject.pashnim.cinema.Objects.MovieDisplay;
 
 import java.util.List;
 
@@ -22,7 +20,6 @@ import java.util.List;
 public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Adapter<MoviesListAdapter.MoviesAdapterViewHolder>
 {
     List<MovieDisplay> m_moviesList;
-    Context m_context;
     MovieClickedListener m_listener;
 
     public MoviesListAdapter(MovieClickedListener listener)

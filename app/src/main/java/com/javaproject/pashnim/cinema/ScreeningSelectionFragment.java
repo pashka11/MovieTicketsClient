@@ -1,12 +1,17 @@
 package com.javaproject.pashnim.cinema;
 
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,15 +34,19 @@ import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MovieDescriptionActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+/**
+ * Created by Nimrod on 24/06/2017.
+ */
 
+public class ScreeningSelectionFragment extends Fragment  implements DatePickerDialog.OnDateSetListener
+{
     MovieDetails m_displayedMovie;
     Bitmap m_savedImageBitmap;
 
     List<Screening> m_allScreenings;
-
-    List<Screening> m_selectedScreenings;
+    List<Screening> m_selectedDayScreenings;
     MonthAdapter.CalendarDay m_selectedDay;
+    Screening m_selectedScreening;
 
     ImageView m_movieImage;
     TextView m_movieTitle;
@@ -47,34 +56,47 @@ public class MovieDescriptionActivity extends AppCompatActivity implements DateP
     TextView m_movieDirector;
     TextView m_movieActors;
     TextView m_movieDescription;
-    EditText m_movieScreeningDate;
+    Button m_movieScreeningDate;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_decription);
 
-        m_movieScreeningDate = (EditText) findViewById(R.id.txtdate);
-        m_movieTitle = (TextView) findViewById(R.id.tv_movie_title);
-        m_movieYear = (TextView) findViewById(R.id.tv_movie_year);
-        m_movieDuration = (TextView) findViewById(R.id.tv_movie_duration);
-        m_movieGenre = (TextView) findViewById(R.id.tv_movie_genre);
-        m_movieDirector = (TextView) findViewById(R.id.tv_movie_director);
-        m_movieActors = (TextView) findViewById(R.id.tv_movie_actors);
-        m_movieDescription = (TextView) findViewById(R.id.tv_movie_description);
-        m_movieImage = (ImageView) findViewById(R.id.iv_movie_image);
+        setHasOptionsMenu(true);
+    }
 
-        m_displayedMovie = (MovieDetails) getIntent().getSerializableExtra("movie");
-        m_savedImageBitmap = getIntent().getParcelableExtra("pic");
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
+    {
+        View v = inflater.inflate(R.layout.fragment_movie_description, container, false);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowCustomEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
+        m_movieScreeningDate = (Button) v.findViewById(R.id.btn_date);
+        m_movieTitle = (TextView) v.findViewById(R.id.tv_movie_title);
+        m_movieYear = (TextView) v.findViewById(R.id.tv_movie_year);
+        m_movieDuration = (TextView) v.findViewById(R.id.tv_movie_duration);
+        m_movieGenre = (TextView) v.findViewById(R.id.tv_movie_genre);
+        m_movieDirector = (TextView) v.findViewById(R.id.tv_movie_director);
+        m_movieActors = (TextView) v.findViewById(R.id.tv_movie_actors);
+        m_movieDescription = (TextView) v.findViewById(R.id.tv_movie_description);
+        m_movieImage = (ImageView) v.findViewById(R.id.iv_movie_image);
+
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
+        m_displayedMovie = ((MainActivity)getActivity()).getSelectedMovie();
+        m_savedImageBitmap = ((MainActivity)getActivity()).getSelectedMovieImage();
 
         PopulateFields();
 
+        // TODO : do not load screenings if we already have screenings!!! check if screenings are null
         LoadScreenings();
 
         InitializeDatePicker();
@@ -124,7 +146,7 @@ public class MovieDescriptionActivity extends AppCompatActivity implements DateP
                     if (screenings != null)
                         m_allScreenings = screenings;
                     else
-                        Toast.makeText(this, "Failed Loading Screenings", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Failed Loading Screenings", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -139,22 +161,10 @@ public class MovieDescriptionActivity extends AppCompatActivity implements DateP
         m_movieImage.setImageBitmap(m_savedImageBitmap);
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-
-        if (item.getItemId() == android.R.id.home)
-        {
-            finish();
-            return true;
-        }
-        else
-            return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth)
     {
         m_selectedDay = view.getSelectedDay();
-        m_selectedScreenings = m_allScreenings.stream().filter(screening ->
+        m_selectedDayScreenings = m_allScreenings.stream().filter(screening ->
                 (screening.ScreeningTime.dayOfMonth().get() == dayOfMonth &&
                         screening.ScreeningTime.monthOfYear().get() == monthOfYear &&
                         screening.ScreeningTime.year().get() == year)).collect(Collectors.toList());
@@ -164,25 +174,56 @@ public class MovieDescriptionActivity extends AppCompatActivity implements DateP
 
     private void ShowSelectedScreeningTimeDialog()
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         builder.setTitle("Choose Time");
 
         builder.setNegativeButton("Cancel", (dialog, id) ->
-                Toast.makeText(this, "Canceled screening selection", Toast.LENGTH_SHORT).show());
+                Toast.makeText(getContext(), "Canceled screening selection", Toast.LENGTH_SHORT).show());
 
-        String[] selectedTimes = m_selectedScreenings.stream()
+        String[] selectedTimes = m_selectedDayScreenings.stream()
                 .map(screening -> screening.ScreeningTime.toString(ISODateTimeFormat.hourMinute()))
                 .toArray(String[]::new);
 
         builder.setItems(selectedTimes, (dialog, which) ->
-                ShowSelectSeatsFragment(m_selectedScreenings.get(which)));
+                m_selectedScreening = m_selectedDayScreenings.get(which));
 
         builder.create().show();
     }
 
-    private void ShowSelectSeatsFragment(Screening screening)
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        // TODO: create seats fragment or intent
+        inflater.inflate(R.menu.menu_ticket_order_process,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu)
+    {
+        MenuItem backItem = menu.findItem(R.id.back_action);
+        MenuItem nextItem = menu.findItem(R.id.next_action);
+
+        nextItem.setVisible(true);
+        backItem.setVisible(true);
+
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.next_action:
+            {
+                if (m_selectedScreening != null)
+                    ((MainActivity)getActivity()).ShowSelectSeatsFragment(m_selectedScreening);
+
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/admin_action"
         android:title="@string/management_action" />
     <item
         android:id="@+id/refresh_action"
         android:title="@string/refresh_action"/>
+    <item
+        android:id="@+id/back_action"
+        android:title="@string/back_action"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_left_arrow_holo_dark"
+        android:visible="false"/>
 </menu>

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:tools="http://schemas.android.com/tools"
                                              android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-                                             tools:context="com.javaproject.pashnim.cinema.MovieDescriptionActivity">
+                                             android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/film_description"
@@ -15,7 +13,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/img" />
 
@@ -24,31 +21,28 @@
             android:layout_width="240dp"
             android:layout_height="33dp"
             android:text="Title: Fast and Furious 8"
-            android:textSize="12sp"
+            android:textSize="24sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@+id/iv_movie_image"
-            android:layout_toStartOf="@+id/iv_movie_image" />
+            android:layout_toLeftOf="@+id/iv_movie_image"/>
 
         <TextView
             android:id="@+id/tv_movie_year"
             android:layout_width="239dp"
             android:layout_height="33dp"
-            android:text="Year: 2017"
-            android:textSize="12sp"
+            android:textSize="24sp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="30dp"
             android:layout_toLeftOf="@+id/iv_movie_image"
-            android:layout_toStartOf="@+id/iv_movie_image" />
+            android:layout_below="@+id/tv_movie_title" />
 
         <TextView
             android:id="@+id/tv_movie_duration"
             android:layout_width="240dp"
             android:layout_height="33dp"
-            android:text="Duration: 136 min"
-            android:textSize="10sp"
+            android:textSize="24sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="55dp"
             android:layout_toLeftOf="@+id/iv_movie_image"
@@ -58,8 +52,7 @@
             android:id="@+id/tv_movie_genre"
             android:layout_width="240dp"
             android:layout_height="33dp"
-            android:text="Genres: Action, Thriller, Crime"
-            android:textSize="10sp"
+            android:textSize="24sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="80dp"
             android:layout_toLeftOf="@+id/iv_movie_image"
@@ -69,8 +62,7 @@
             android:id="@+id/tv_movie_director"
             android:layout_width="240dp"
             android:layout_height="40dp"
-            android:text="Director: F. Gary Gray"
-            android:textSize="10sp"
+            android:textSize="24sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="105dp"
             android:layout_toLeftOf="@+id/iv_movie_image"
@@ -80,36 +72,29 @@
             android:id="@+id/tv_movie_actors"
             android:layout_width="240dp"
             android:layout_height="60dp"
-            android:text="Actors: Vin Diesel, Jason Statham, Dwayne Johnson, Michelle Rodriguez, Tyrese Gibson"
-            android:textSize="10sp"
+            android:textSize="24sp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="180dp"
-            android:layout_toLeftOf="@+id/iv_movie_image"
-            android:layout_toStartOf="@+id/iv_movie_image"/>
+            android:layout_toLeftOf="@+id/iv_movie_image"/>
 
         <TextView
             android:layout_width="240dp"
             android:layout_height="110dp"
-            android:text="Description: After Dom is recruited by a mysterious villainess hacker, he turns against his family and most importantly, goes on the wrong side of the law again. Now, the crew must unite to bring home the man who made them a family and stop her from unleashing chaos on a grand scale."
             android:textSize="15sp"
             android:id="@+id/tv_movie_description"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="1dp"
+            android:layout_marginStart="1dp"
             android:layout_marginTop="360dp"/>
 
-
-        <EditText
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtdate"
+            android:id="@+id/btn_date"
             android:textSize="20sp"
-            android:hint="תאריך הקרנה "
+            android:text="@string/choose_screening_button"
             android:gravity="center"
             android:layout_below="@+id/tv_movie_description"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>

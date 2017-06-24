@@ -3,10 +3,11 @@
     <string name="mainTitle">Welcome to PashNim Cinema</string>
     <string name="management_action">Management</string>
     <string name="refresh_action">Refresh</string>
-    
-    
-    
-    
+    <string name="next_action">Next</string>
+    <string name="back_action">Back</string>
+    <string name="choose_screening_button">בחר הקרנה</string>
+
+
     <string-array name="Date_of_Screen">
         <item>Sunday</item>
         <item>Monday</item>

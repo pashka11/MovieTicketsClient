@@ -1,4 +1,4 @@
-package com.javaproject.pashnim.cinema.DisplayObjects;
+package com.javaproject.pashnim.cinema.Objects;
 
 import android.graphics.Bitmap;
 import android.graphics.Movie;
