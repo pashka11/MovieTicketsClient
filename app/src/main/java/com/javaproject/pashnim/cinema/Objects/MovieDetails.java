@@ -3,8 +3,6 @@ package com.javaproject.pashnim.cinema.Objects;
 import org.joda.time.LocalDate;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Nimrod on 15/06/2017.
@@ -12,12 +10,7 @@ import java.util.List;
 
 public class MovieDetails implements Serializable
 {
-    public MovieDetails()
-    {
-        Actors = new ArrayList<>();
-    }
-
-    public MovieDetails(int id, String name, String description, String imageName, LocalDate releaseDate, String director, short duration, String genres, List<String> actors)
+    public MovieDetails(int id, String name, String description, String imageName, String director, String actors, LocalDate releaseDate, String genres, int duration)
     {
         Id = id;
         Name = name;
@@ -36,7 +29,7 @@ public class MovieDetails implements Serializable
     public String ImageName;
     public LocalDate ReleaseDate;
     public String Director;
-    public short Duration;
+    public int Duration;
     public String Genres;
-    public List<String> Actors;
+    public String Actors;
 }

@@ -86,10 +86,14 @@ public class MainActivity extends AppCompatActivity
     {
         m_selectedScreening = screening;
 
+        SeatsSelectionFragment frag = new SeatsSelectionFragment();
+
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container, new SeatsSelectionFragment())
+                .replace(R.id.container, frag)
                 .addToBackStack(null).commit();
+
+        frag.PassData(screening, m_selectedMovie.MovieDetails);
 
         // TODO : we can use add function instead of replace with a unique TAG and then hide the fragment with the tag;
 //        getFragmentManager()
@@ -124,4 +128,8 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    public interface DataReceiver
+    {
+        void PassData(Object obj1, Object obj2);
+    }
 }

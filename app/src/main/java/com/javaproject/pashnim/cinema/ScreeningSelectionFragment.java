@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -118,9 +117,9 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
                     .map(screening ->
                     {
                         Calendar cal = Calendar.getInstance();
-                        cal.set(screening.ScreeningTime.getYear(),
-                                screening.ScreeningTime.getMonthOfYear(),
-                                screening.ScreeningTime.getDayOfMonth());
+                        cal.set(screening.Time.getYear(),
+                                screening.Time.getMonthOfYear(),
+                                screening.Time.getDayOfMonth());
                         return cal;
                     })
                     .toArray(Calendar[]::new));
@@ -153,7 +152,7 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
     private void PopulateFields()
     {
         m_movieTitle.setText(m_displayedMovie.Name);
-        m_movieActors.setText(m_displayedMovie.Actors.stream().map(Object::toString).collect(Collectors.joining(", ")));
+        m_movieActors.setText(m_displayedMovie.Actors);
         m_movieDescription.setText(m_displayedMovie.Description);
         m_movieDuration.setText(String.valueOf(m_displayedMovie.Duration));
         m_movieGenre.setText(m_displayedMovie.Genres);
@@ -165,9 +164,9 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
     {
         m_selectedDay = view.getSelectedDay();
         m_selectedDayScreenings = m_allScreenings.stream().filter(screening ->
-                (screening.ScreeningTime.dayOfMonth().get() == dayOfMonth &&
-                        screening.ScreeningTime.monthOfYear().get() == monthOfYear &&
-                        screening.ScreeningTime.year().get() == year)).collect(Collectors.toList());
+                (screening.Time.dayOfMonth().get() == dayOfMonth &&
+                        screening.Time.monthOfYear().get() == monthOfYear &&
+                        screening.Time.year().get() == year)).collect(Collectors.toList());
 
         ShowSelectedScreeningTimeDialog();
     }
@@ -182,7 +181,7 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
                 Toast.makeText(getContext(), "Canceled screening selection", Toast.LENGTH_SHORT).show());
 
         String[] selectedTimes = m_selectedDayScreenings.stream()
-                .map(screening -> screening.ScreeningTime.toString(ISODateTimeFormat.hourMinute()))
+                .map(screening -> screening.Time.toString(ISODateTimeFormat.hourMinute()))
                 .toArray(String[]::new);
 
         builder.setItems(selectedTimes, (dialog, which) ->
