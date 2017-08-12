@@ -23,3 +23,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.mobsandgeeks.saripaar.** {*;}
+-keep @com.mobsandgeeks.saripaar.annotation.ValidateUsing class * {*;}
+#YOU MUST ADD BELOW LINE WITH YOUR PACKAGE!
+-keep class com.javaproject.pashnim.cinema.Validation.TextInputLayoutDataAdapter {*;}

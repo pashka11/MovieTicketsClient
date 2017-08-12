@@ -10,20 +10,30 @@ import java.io.Serializable;
 
 public class MovieDetails implements Serializable
 {
-    public MovieDetails(int id, String name, String description, String imageName, String director, String actors, LocalDate releaseDate, String genres, int duration)
+    public MovieDetails()
+    {
+
+    }
+
+    public MovieDetails(String id, String name, String description, String imageName, String director, String actors, LocalDate releaseDate, String genres, int duration)
     {
         Id = id;
         Name = name;
         Description = description;
         ImageName = imageName;
-        ReleaseDate = releaseDate;
         Director = director;
         Actors = actors;
-        Duration = duration;
+        ReleaseDate = releaseDate;
         Genres = genres;
+        Duration = duration;
     }
 
-    public int Id;
+    public MovieDetails(String name, String description, String imageName, String director, String actors, LocalDate releaseDate, String genres, int duration)
+    {
+        this ("", name, description, imageName, director, actors, releaseDate, genres, duration);
+    }
+
+    public String Id;
     public String Name;
     public String Description;
     public String ImageName;

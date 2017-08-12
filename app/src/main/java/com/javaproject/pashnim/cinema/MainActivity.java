@@ -10,11 +10,14 @@ import android.view.MenuItem;
 import com.javaproject.pashnim.cinema.Objects.MovieDetails;
 import com.javaproject.pashnim.cinema.Objects.MovieDisplay;
 import com.javaproject.pashnim.cinema.Objects.Screening;
+import com.javaproject.pashnim.cinema.Objects.Seat;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
-    private MovieDisplay m_selectedMovie;
-    private Screening m_selectedScreening;
+    private MovieDisplay _selectedMovie;
+    private Screening _selectedScreening;
 
     // TODO : Save Fragments here so we can HIDE/SHOW them on back
     // TODO : Change transaction to hide previous, add new and commit instead of current replace
@@ -58,9 +61,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu)
     {
-        //MenuItem item = menu.findItem(android.R.id.home);
-        //item.setVisible(false);
-
         return true;
     }
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity
 
     public void ShowSelectScreeningFragment(MovieDisplay movieDisplay)
     {
-        m_selectedMovie = movieDisplay;
+        _selectedMovie = movieDisplay;
 
         getFragmentManager()
                 .beginTransaction()
@@ -82,9 +82,22 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(null).commit();
     }
 
-    public void ShowSelectSeatsFragment(Screening screening)
+    public void ShowPurchaseDetailsFragment(List<Seat> selectedSeats, String selectionId) throws Exception
     {
-        m_selectedScreening = screening;
+        PurchaseFinishFragment frag = new PurchaseFinishFragment();
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, frag)
+                .addToBackStack(null).commit();
+
+        // Passing the required data for the fragment
+        frag.PassData(_selectedScreening, _selectedMovie.MovieDetails, selectedSeats, selectionId);
+    }
+
+    public void ShowSelectSeatsFragment(Screening screening) throws Exception
+    {
+        _selectedScreening = screening;
 
         SeatsSelectionFragment frag = new SeatsSelectionFragment();
 
@@ -93,7 +106,7 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.container, frag)
                 .addToBackStack(null).commit();
 
-        frag.PassData(screening, m_selectedMovie.MovieDetails);
+        frag.PassData(screening, _selectedMovie.MovieDetails);
 
         // TODO : we can use add function instead of replace with a unique TAG and then hide the fragment with the tag;
 //        getFragmentManager()
@@ -105,17 +118,17 @@ public class MainActivity extends AppCompatActivity
 
     public MovieDetails getSelectedMovie()
     {
-        return m_selectedMovie.MovieDetails;
+        return _selectedMovie.MovieDetails;
     }
 
     public Bitmap getSelectedMovieImage()
     {
-        return m_selectedMovie.MoviePicture;
+        return _selectedMovie.MoviePicture;
     }
 
     public Screening getSelectedScreening()
     {
-        return m_selectedScreening;
+        return _selectedScreening;
     }
 
     @Override
@@ -127,9 +140,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     public interface DataReceiver
     {
-        void PassData(Object obj1, Object obj2);
+        void PassData(Object ... objects) throws Exception;
     }
 }

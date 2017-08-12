@@ -10,18 +10,19 @@ import java.util.ArrayList;
 
 public class Screening
 {
-    public int Id;
+    public String Id;
     public LocalDateTime Time;
-    public int HallId;
-    public ArrayList<ArrayList<Integer>> Seats;
+    public String HallId;
+    public ArrayList<Row> Seats;
     public int Price;
-    public int MovieId;
+    public String MovieId;
 
     public Screening()
     {
 
     }
-    public Screening(int screeningId, int movieId, LocalDateTime screeningTime, int hallId, int price, ArrayList<ArrayList<Integer>> seats)
+
+    public Screening(String screeningId, String movieId, LocalDateTime screeningTime, String hallId, int price, ArrayList<Row> seats)
     {
         this.MovieId = movieId;
         this.Id = screeningId;
@@ -31,3 +32,4 @@ public class Screening
         this.Seats = seats;
     }
 }
+

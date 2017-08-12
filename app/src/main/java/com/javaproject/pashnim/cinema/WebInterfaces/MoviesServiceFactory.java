@@ -9,8 +9,13 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public final class MoviesServiceFactory
 {
@@ -32,7 +37,11 @@ public final class MoviesServiceFactory
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(WebApiConstants.BaseUrl)
+                    .client(new OkHttpClient.Builder().writeTimeout(20, TimeUnit.SECONDS)
+                            .readTimeout(20, TimeUnit.SECONDS).build())
+                    .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create(gson.create()))
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
 
             m_service = retrofit.create(MoviesServiceAPI.class);

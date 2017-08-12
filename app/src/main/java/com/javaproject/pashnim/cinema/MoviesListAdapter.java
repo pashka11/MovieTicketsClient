@@ -1,6 +1,7 @@
 package com.javaproject.pashnim.cinema;
 
 import android.graphics.Bitmap;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 import com.javaproject.pashnim.cinema.Objects.MovieDisplay;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Nimrod on 13/06/2017.
@@ -71,17 +75,18 @@ public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Ad
 
     class MoviesAdapterViewHolder extends RecyclerView.ViewHolder
     {
-        TextView m_movieTitle;
-        ImageView m_moviePicture;
+        @BindView(R.id.tv_movie_desc_preview) TextView m_movieTitle;
+        @BindView(R.id.iv_movie_image_preview) ImageView m_moviePicture;
+        @BindView(R.id.card_view) CardView _cardView;
 
         MoviesAdapterViewHolder(View view)
         {
             super(view);
 
-            this.m_movieTitle = (TextView)view.findViewById(R.id.tv_movie_desc_preview);
-            this.m_moviePicture = (ImageView) view.findViewById(R.id.iv_movie_image_preview);
+            ButterKnife.bind(this, view);
 
-            view.setOnClickListener(v -> m_listener.OnMovieItemClicked(getAdapterPosition()));
+            //view.setOnClickListener(v -> m_listener.OnMovieItemClicked(getAdapterPosition()));
+            _cardView.setOnClickListener(v -> m_listener.OnMovieItemClicked(getAdapterPosition()));
         }
 
         public void bind(final MovieDisplay movie)

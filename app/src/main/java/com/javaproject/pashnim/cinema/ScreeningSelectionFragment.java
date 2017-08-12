@@ -5,13 +5,14 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,14 +23,16 @@ import com.javaproject.pashnim.cinema.WebInterfaces.MoviesServiceFactory;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.date.MonthAdapter;
 
+import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.reactivex.Single;
-import io.reactivex.SingleOnSubscribe;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -37,7 +40,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Nimrod on 24/06/2017.
  */
 
-public class ScreeningSelectionFragment extends Fragment  implements DatePickerDialog.OnDateSetListener
+public class ScreeningSelectionFragment extends Fragment implements DatePickerDialog.OnDateSetListener
 {
     MovieDetails m_displayedMovie;
     Bitmap m_savedImageBitmap;
@@ -47,16 +50,15 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
     MonthAdapter.CalendarDay m_selectedDay;
     Screening m_selectedScreening;
 
-    ImageView m_movieImage;
-    TextView m_movieTitle;
-    TextView m_movieYear;
-    TextView m_movieDuration;
-    TextView m_movieGenre;
-    TextView m_movieDirector;
-    TextView m_movieActors;
-    TextView m_movieDescription;
-    Button m_movieScreeningDate;
-
+    @BindView(R.id.iv_movie_image) ImageView _movieImage;
+    @BindView(R.id.tv_movie_title) TextView _movieTitle;
+    @BindView(R.id.tv_movie_year) TextView _movieYear;
+    @BindView(R.id.tv_movie_duration) TextView _movieDuration;
+    @BindView(R.id.tv_movie_genre) TextView _movieGenre;
+    @BindView(R.id.tv_movie_director) TextView _movieDirector;
+    @BindView(R.id.tv_movie_actors) TextView _movieActors;
+    @BindView(R.id.tv_movie_description) TextView _movieDescription;
+    @BindView(R.id.tv_selected_screening) TextView _selectedScreeningView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -71,16 +73,9 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_movie_description, container, false);
+        ButterKnife.bind(this, v);
 
-        m_movieScreeningDate = (Button) v.findViewById(R.id.btn_date);
-        m_movieTitle = (TextView) v.findViewById(R.id.tv_movie_title);
-        m_movieYear = (TextView) v.findViewById(R.id.tv_movie_year);
-        m_movieDuration = (TextView) v.findViewById(R.id.tv_movie_duration);
-        m_movieGenre = (TextView) v.findViewById(R.id.tv_movie_genre);
-        m_movieDirector = (TextView) v.findViewById(R.id.tv_movie_director);
-        m_movieActors = (TextView) v.findViewById(R.id.tv_movie_actors);
-        m_movieDescription = (TextView) v.findViewById(R.id.tv_movie_description);
-        m_movieImage = (ImageView) v.findViewById(R.id.iv_movie_image);
+        _movieDescription.setMovementMethod(ScrollingMovementMethod.getInstance());
 
         return v;
     }
@@ -97,22 +92,21 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
 
         // TODO : do not load screenings if we already have screenings!!! check if screenings are null
         LoadScreenings();
-
-        InitializeDatePicker();
     }
 
-    private void InitializeDatePicker()
+    @OnClick(R.id.btn_date)
+    void OnDatePickerButtonClicked()
     {
-        m_movieScreeningDate.setOnClickListener(v ->
-        {
-            Calendar now = Calendar.getInstance();
-            DatePickerDialog dpd = DatePickerDialog.newInstance(
-                    this,
-                    now.get(Calendar.YEAR),
-                    now.get(Calendar.MONTH),
-                    now.get(Calendar.DAY_OF_MONTH)
-            );
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
 
+        if (m_allScreenings != null)
+        {
             dpd.setSelectableDays(m_allScreenings.stream()
                     .map(screening ->
                     {
@@ -125,21 +119,14 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
                     .toArray(Calendar[]::new));
 
             dpd.show(getFragmentManager(), "Datepickerdialog");
-        });
+        }
+        else
+            Log.d("Screenings", "screenings were not found while trying to init date picker");
     }
 
     private void LoadScreenings()
     {
-        Single.create((SingleOnSubscribe<List<Screening>>) singleEmitter ->
-                {
-                    List<Screening> screenings = MoviesServiceFactory.GetInstance().GetMovieScreenings(m_displayedMovie.Id).execute().body();
-
-                    if (screenings != null)
-                        singleEmitter.onSuccess(screenings);
-                    else
-                        singleEmitter.onError(null);
-                }
-        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        MoviesServiceFactory.GetInstance().GetMovieScreenings(m_displayedMovie.Id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe((screenings, throwable) ->
                 {
                     if (screenings != null)
@@ -151,22 +138,24 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
 
     private void PopulateFields()
     {
-        m_movieTitle.setText(m_displayedMovie.Name);
-        m_movieActors.setText(m_displayedMovie.Actors);
-        m_movieDescription.setText(m_displayedMovie.Description);
-        m_movieDuration.setText(String.valueOf(m_displayedMovie.Duration));
-        m_movieGenre.setText(m_displayedMovie.Genres);
-        m_movieYear.setText(m_displayedMovie.ReleaseDate.toString());
-        m_movieImage.setImageBitmap(m_savedImageBitmap);
+        _movieTitle.setText(m_displayedMovie.Name);
+        _movieActors.setText(String.format(getString(R.string.actors), m_displayedMovie.Actors));
+        _movieDuration.setText(String.format(getString(R.string.duration), String.valueOf(m_displayedMovie.Duration)));
+        _movieGenre.setText(String.format(getString(R.string.genres), m_displayedMovie.Genres));
+        _movieYear.setText(String.format("%s %s", getString(R.string.release_date), m_displayedMovie.ReleaseDate.toString(getString(R.string.release_date_time_pattern))));
+        _movieImage.setImageBitmap(m_savedImageBitmap);
+        _movieDirector.setText(String.format(getString(R.string.director), m_displayedMovie.Director));
+        _movieDescription.setText(String.format(getString(R.string.description_format), m_displayedMovie.Description));
     }
 
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth)
     {
         m_selectedDay = view.getSelectedDay();
-        m_selectedDayScreenings = m_allScreenings.stream().filter(screening ->
-                (screening.Time.dayOfMonth().get() == dayOfMonth &&
-                        screening.Time.monthOfYear().get() == monthOfYear &&
-                        screening.Time.year().get() == year)).collect(Collectors.toList());
+
+        m_selectedDayScreenings = m_allScreenings
+                .parallelStream().filter(screening ->
+                        (screening.Time.toLocalDate().isEqual(new LocalDate(year, monthOfYear, dayOfMonth))))
+                .collect(Collectors.toList());
 
         ShowSelectedScreeningTimeDialog();
     }
@@ -175,17 +164,22 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setTitle("Choose Time");
+        builder.setTitle(R.string.choose_screening_time);
 
         builder.setNegativeButton("Cancel", (dialog, id) ->
-                Toast.makeText(getContext(), "Canceled screening selection", Toast.LENGTH_SHORT).show());
+                Toast.makeText(getContext(), R.string.screening_selection_canceled, Toast.LENGTH_SHORT).show());
 
         String[] selectedTimes = m_selectedDayScreenings.stream()
                 .map(screening -> screening.Time.toString(ISODateTimeFormat.hourMinute()))
                 .toArray(String[]::new);
 
         builder.setItems(selectedTimes, (dialog, which) ->
-                m_selectedScreening = m_selectedDayScreenings.get(which));
+        {
+            m_selectedScreening = m_selectedDayScreenings.get(which);
+            _selectedScreeningView.setText(
+                    String.format(getString(R.string.selected_screening),
+                            m_selectedScreening.Time.toString("dd/MM/yyyy - HH:mm")));
+        });
 
         builder.create().show();
     }
@@ -217,7 +211,13 @@ public class ScreeningSelectionFragment extends Fragment  implements DatePickerD
             case R.id.next_action:
             {
                 if (m_selectedScreening != null)
-                    ((MainActivity)getActivity()).ShowSelectSeatsFragment(m_selectedScreening);
+                    try                    {
+                        ((MainActivity)getActivity()).ShowSelectSeatsFragment(m_selectedScreening);
+                    } catch (Exception e)                    {
+                        e.printStackTrace();
+                    }
+                else
+                    Toast.makeText(getContext(), R.string.screening_wasnt_selected, Toast.LENGTH_LONG).show();
 
                 return true;
             }

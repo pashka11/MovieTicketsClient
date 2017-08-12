@@ -2,9 +2,11 @@ package com.javaproject.pashnim.cinema.WebInterfaces;
 
 import com.javaproject.pashnim.cinema.Objects.MovieDetails;
 import com.javaproject.pashnim.cinema.Objects.Screening;
+import com.javaproject.pashnim.cinema.Objects.Seat;
 
 import java.util.List;
 
+import io.reactivex.Single;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -20,10 +22,10 @@ public interface MoviesServiceAPI
 {
     // Movies
     @GET(WebApiConstants.Movies.RelativeUrl)
-    Call<List<MovieDetails>> GetAllMovies();
+    Single<List<MovieDetails>> GetAllMovies();
 
     @GET(WebApiConstants.Movies.GetMovie)
-    Call<MovieDetails> GetMovie(@Path(WebApiConstants.Movies.MovieId) int id);
+    Call<MovieDetails> GetMovie(@Path(WebApiConstants.Movies.MovieId) String id);
 
     @POST(WebApiConstants.Movies.RelativeUrl)
     Call<ResponseBody> AddMovie(@Body MovieDetails movie);
@@ -32,5 +34,8 @@ public interface MoviesServiceAPI
     Call<ResponseBody> GetMoviePicture(@Path(WebApiConstants.Images.ImageName) String name);
 
     @GET(WebApiConstants.Movies.GetMovieScreenings)
-    Call<List<Screening>> GetMovieScreenings(@Path(WebApiConstants.Movies.MovieId) int id);
+    Single<List<Screening>> GetMovieScreenings(@Path(WebApiConstants.Movies.MovieId) String id);
+
+    @POST(WebApiConstants.Screenings.SaveSeats)
+    Single<String> SaveSelectedSeats(@Path(WebApiConstants.Screenings.ScreeningId) String screeningId, @Body List<Seat> seats);
 }

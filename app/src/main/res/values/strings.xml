@@ -5,8 +5,41 @@
     <string name="refresh_action">Refresh</string>
     <string name="next_action">Next</string>
     <string name="back_action">Back</string>
-    <string name="choose_screening_button">בחר הקרנה</string>
+    <string name="movie_picture">Movie Picture</string>
 
+    // Purchase fields Hints
+    <string name="last_name">Last Name</string>
+    <string name="given_name">Given Name</string>
+    <string name="email">Email</string>
+    <string name="card_expiration">Expiry Date</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="card_number">Credit Card Number</string>
+    <string name="purchase_confirm">Complete Purchase</string>
+
+    // Purchase fields Error Messages
+    <string name="empty_field_error">Field should not be empty</string>
+    <string name="last_name_error">שם משפחה</string>
+    <string name="given_name_error">שם פרטי</string>
+    <string name="email_error">Email address is invalid</string>
+    <string name="card_expiration_error">Expiration date is invalid</string>
+    <string name="phone_number_error">Phone number is invalid</string>
+    <string name="card_number_error">Credit card number is invalid</string>
+    <string name="purchase_confirm_error">בצע רכישה</string>
+    <string name="choose_screening_button">Choose Screening</string>
+    <string name="screening_wasnt_selected">Screening was not selected</string>
+    <string name="screening_selection_canceled">Canceled screening selection</string>
+
+    // Movie details and screening selection
+    <string name="choose_screening_time">Choose Screening Time</string>
+    <string name="release_date_time_pattern">dd/MM/yyyy</string>
+    <string name="release_date">Release Date:</string>
+    <string name="actors">Actors: %s</string>
+    <string name="duration">Duration: %s minutes</string>
+    <string name="genres">Genres: %s</string>
+    <string name="director">Director: %s</string>
+    <string name="illegal_fields">Illegal fields exists</string>
+    <string name="selected_screening">Selected Screening: %s</string>
+    <string name="description_format">Description: %s</string>
 
     <string-array name="Date_of_Screen">
         <item>Sunday</item>

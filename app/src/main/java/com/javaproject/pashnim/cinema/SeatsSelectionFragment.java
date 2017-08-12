@@ -1,25 +1,40 @@
 package com.javaproject.pashnim.cinema;
 
 import android.app.Fragment;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.javaproject.pashnim.cinema.Objects.MovieDetails;
+import com.javaproject.pashnim.cinema.Objects.Row;
 import com.javaproject.pashnim.cinema.Objects.Screening;
+import com.javaproject.pashnim.cinema.Objects.Seat;
+import com.javaproject.pashnim.cinema.WebInterfaces.MoviesServiceFactory;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Nimrod on 24/06/2017.
@@ -27,8 +42,6 @@ import java.util.ArrayList;
 
 public class SeatsSelectionFragment extends Fragment implements MainActivity.DataReceiver
 {
-
-
     // Constants
     public enum SeatState
     {
@@ -47,13 +60,14 @@ public class SeatsSelectionFragment extends Fragment implements MainActivity.Dat
         }
     }
 
-    TextView _screeningSummeryView;
-    GridView _seatsView;
-    private LinearLayout _rowsNumbersView;
+    @BindView(R.id.pb_seats) ProgressBar _progressBar;
+    @BindView(R.id.tv_screening_summery) TextView _screeningSummeryView;
+    @BindView(R.id.gv_seats) GridView _seatsView;
 
-    private Screening _chosenScreening;
+    private String _seatSelectionId;
+    private Screening _selectedScreening;
     private MovieDetails _chosenMovie;
-    private ArrayList<ArrayList<Integer>> _seats;
+    private ArrayList<Row> _seats;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -68,36 +82,28 @@ public class SeatsSelectionFragment extends Fragment implements MainActivity.Dat
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_seat_selection, container, false);
-
-        _seatsView = (GridView) v.findViewById(R.id.gv_seats);
-        _screeningSummeryView = (TextView) v.findViewById(R.id.tv_screening_summery);
-        _rowsNumbersView = (LinearLayout) v.findViewById(R.id.ll_rows_numbers);
+        ButterKnife.bind(this, v);
 
         // Initialize the movie summary
-        _screeningSummeryView.setText(ConstructScreeningSummary(_chosenScreening));
-
-        // Init row numbers
-        _rowsNumbersView.setWeightSum(_seats.size());
-        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-
-        for (int rows = 1; rows <= _seats.size(); rows++)
-        {
-            TextView tv = new TextView(container.getContext());
-            tv.setTextSize(14f);
-            tv.setText(String.valueOf(rows));
-            _rowsNumbersView.addView(tv, params);
-        }
-        //_rowsNumbersView.setText(String.format("%s%d\n", _rowsNumbersView.getText().toString(), rows));//_rowsNumbersView.append(rows + "\n");
+        _screeningSummeryView.setText(ConstructScreeningSummary(_selectedScreening));
 
         // Initialize the grid
-        _seatsView.setNumColumns(_seats.get(0).size());
+        _seatsView.setNumColumns(_seats.get(0).Seats.size() + 1);
 
-        _seatsView.setOnItemClickListener((parent, view, position, id) ->
+        _seatsView.setAdapter(new SeatsAdapter());
+
+        return v;
+    }
+
+    @OnItemClick(R.id.gv_seats)
+    void SeatClicked(AdapterView<?> parent, View view, int position, long id)
+    {
+        if (!SeatsSelectionFragment.this.IsNumbersColumn(position))
         {
-            int rowIndex = CalcRowFromPosition(position);
-            int seatIndex = CalcSeatInRowFromPosition(position);
+            int rowIndex = SeatsSelectionFragment.this.CalcRowFromPosition(position);
+            int seatIndex = SeatsSelectionFragment.this.CalcSeatInRowFromPosition(position);
 
-            int seatStatus = _seats.get(rowIndex).get(seatIndex);
+            int seatStatus = _seats.get(rowIndex).Seats.get(seatIndex);
 
             if (seatStatus != SeatState.Occupied.getValue())
             {
@@ -105,59 +111,84 @@ public class SeatsSelectionFragment extends Fragment implements MainActivity.Dat
 
                 ((ImageView) view).setImageDrawable(
                         isSeatChosen ?
-                                getResources().getDrawable(R.drawable.cinemaseatfree, null) :
-                                getResources().getDrawable(R.drawable.cinemaseatchosen, null));
-                _seats.get(rowIndex).set(seatIndex,
+                                SeatsSelectionFragment.this.getResources().getDrawable(R.drawable.cinemaseatfree, null) :
+                                SeatsSelectionFragment.this.getResources().getDrawable(R.drawable.cinemaseatchosen, null));
+                _seats.get(rowIndex).Seats.set(seatIndex,
                         isSeatChosen ?
                                 SeatState.Free.getValue() :
                                 SeatState.Chosen.getValue());
             }
-        });
-
-        _seatsView.setAdapter(new SeatsAdapter());
-
-        return v;
+        }
     }
 
     private String ConstructScreeningSummary(Screening screening)
     {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append(_chosenMovie.Name).append("\n").append("מועד הקרנה: ");
-        builder.append(screening.Time.toString("HH:mm dd/MM/yyyy"));
-
-        return builder.toString();
+        return new StringBuilder()
+                .append(_chosenMovie.Name).append("\n")
+                .append("Hall ").append(screening.HallId)//.append("\n")
+                //.append("Screening Date: ")
+        .append(" at ").append(screening.Time.toString("HH:mm dd/MM/yyyy ")).toString();
     }
 
     @Override
-    public void PassData(Object obj1, Object obj2)
+    public void PassData(Object ... objects) throws Exception
     {
+        if (objects.length < 2)
+            throw new Exception("Not enough arguments received");
+
+        Object obj1 = objects[0];
+        Object obj2 = objects[1];
+
         if (obj1 instanceof Screening && obj2 instanceof  MovieDetails)
         {
             _seats = ((Screening) obj1).Seats;
-            _chosenScreening = ((Screening) obj1);
+            _selectedScreening = ((Screening) obj1);
             _chosenMovie = (MovieDetails) obj2;
         }
         else
             Log.d("Seat Selection", "Unexpected data received");
     }
 
+    private boolean IsNumbersColumn(int pos)
+    {
+        return (pos + 1) % (_seats.get(0).Seats.size() + 1) == 0;
+    }
+
     private int CalcRowFromPosition(int pos)
     {
-        return pos / _seats.get(0).size();
+        return pos / (_seats.get(0).Seats.size() + 1);
     }
 
     private int CalcSeatInRowFromPosition(int pos)
     {
-        return pos % _seats.get(0).size();
+        return pos % (_seats.get(0).Seats.size() + 1);
     }
 
     private class SeatsAdapter extends BaseAdapter
     {
+        private final int _seatColumnWidth;
+        private final float _textColWidth;
+
+        private final float FONT_SIZE = 12f;
+
+        public SeatsAdapter()
+        {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            _seatColumnWidth = displayMetrics.widthPixels / _seats.get(0).Seats.size();
+
+            Paint p = new Paint();
+            final float densityMultiplier = displayMetrics.density;
+            final float scaledPx = FONT_SIZE * densityMultiplier;
+            p.setTextSize(scaledPx);
+
+            _textColWidth = p.measureText("99");
+        }
+
         @Override
         public int getCount()
         {
-            return _seats.size() * _seats.get(0).size();
+            return _seats.size() * (_seats.get(0).Seats.size() + 1);
         }
 
         @Override
@@ -175,21 +206,41 @@ public class SeatsSelectionFragment extends Fragment implements MainActivity.Dat
         @Override
         public View getView(int position, View convertView, ViewGroup parent)
         {
-            ImageView image = new ImageView(parent.getContext());
-            //image.setLayoutParams(new ViewGroup.LayoutParams(20,20));
-            image.setScaleType(ImageView.ScaleType.FIT_XY);
-            image.setAdjustViewBounds(true);
+            if (convertView != null)
+                return convertView;
 
             int rowNum = CalcRowFromPosition(position);
             int seatNum = CalcSeatInRowFromPosition(position);
 
-            int seatDrawable = _seats.get(rowNum).get(seatNum) == 0 ? R.drawable.cinemaseatfree :
-                    _seats.get(rowNum).get(seatNum) == 1 ? R.drawable.cinemaseatocuppied : R.drawable.cinemaseatchosen;
+            if (!IsNumbersColumn(position))
+            {
+                ImageView image = new ImageView(parent.getContext());
 
-            image.setImageDrawable(getResources().
-                    getDrawable(seatDrawable, null));
+                image.setLayoutParams(new GridView.LayoutParams(_seatColumnWidth, _seatColumnWidth));
+                image.setPadding(5, 5, 5, 5);
 
-            return image;
+                image.setAdjustViewBounds(true);
+
+                int seatDrawable = _seats.get(rowNum).Seats.get(seatNum) == 0 ? R.drawable.cinemaseatfree :
+                        _seats.get(rowNum).Seats.get(seatNum) == 1 ? R.drawable.cinemaseatocuppied : R.drawable.cinemaseatchosen;
+
+                image.setImageDrawable(getResources().
+                        getDrawable(seatDrawable, null));
+
+                return image;
+            }
+            else
+            {
+                TextView tv = new TextView(parent.getContext());
+                tv.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                tv.setTextSize((float) ((_seatColumnWidth * 0.35) / getResources().getDisplayMetrics().scaledDensity));
+                tv.setHeight(_seatColumnWidth);
+                tv.setGravity(Gravity.CENTER);
+                tv.setMaxLines(1);
+                tv.setText(String.valueOf(rowNum + 1));
+
+                return tv;
+            }
         }
     }
 
@@ -219,12 +270,47 @@ public class SeatsSelectionFragment extends Fragment implements MainActivity.Dat
         {
             case R.id.next_action:
             {
-                // TODO : Handle next
+                CreateSeatSelectionRequest();
 
                 return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void CreateSeatSelectionRequest()
+    {
+        // Create seats list from seats matrix
+        List<Seat> selectedSeats = new ArrayList<>();
+
+        for (int row = 0; row < _seats.size(); row++)
+            for (int seat = 0; seat < _seats.get(row).Seats.size(); seat++)
+                if (_seats.get(row).Seats.get(seat) == SeatState.Chosen.getValue())
+                    selectedSeats.add(new Seat(row, seat));
+
+
+        // Start save seats request
+        MoviesServiceFactory.GetInstance().SaveSelectedSeats(_selectedScreening.Id, selectedSeats)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable ->
+                {
+                    _seatsView.setVisibility(View.GONE);
+                    _progressBar.setVisibility(View.VISIBLE);
+                })
+                .subscribe((selectionId, throwable) ->
+                {
+                    _seatsView.setVisibility(View.VISIBLE);
+                    _progressBar.setVisibility(View.GONE);
+
+                    if (selectionId != null && !selectionId.isEmpty())
+                    {
+                        _seatSelectionId = selectionId;
+                        ((MainActivity) getActivity()).ShowPurchaseDetailsFragment(selectedSeats, selectionId);
+                    }
+                    else
+                        Toast.makeText(getContext(), "Failed saving seats", Toast.LENGTH_SHORT).show();
+                });
     }
 }

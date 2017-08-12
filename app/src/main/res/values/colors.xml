@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1919ce</color>
-    <color name="colorPrimaryDark">#002d80</color>
-    <color name="colorAccent">#4a56ff</color>
-    <color name="viewBg">#3586c2</color>
-    <color name="movie_title">#ffffff</color>
+    <color name="colorPrimary">#ce7019</color>
+    <color name="colorPrimaryDark">#3a3a3a</color>
+    <color name="colorAccent">#ff8f4a</color>
+    <color name="viewBg">#e3e3e3</color>
+    <color name="movie_title">#272525</color>
+    <color name="fragmentBackground">#e3e3e3</color>
+
+
+    <color name="image_border_start">#e86703</color>
+    <color name="image_border_end">#918888</color>
+    <color name="image_border_center">#b3de822c</color>
 </resources>

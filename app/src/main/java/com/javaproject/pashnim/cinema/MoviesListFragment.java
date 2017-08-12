@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,36 +22,33 @@ import android.widget.Toast;
 
 import com.javaproject.pashnim.cinema.Objects.MovieDetails;
 import com.javaproject.pashnim.cinema.Objects.MovieDisplay;
-import com.javaproject.pashnim.cinema.WebInterfaces.MoviesServiceAPI;
 import com.javaproject.pashnim.cinema.WebInterfaces.MoviesServiceFactory;
 import com.javaproject.pashnim.cinema.WebInterfaces.WebApiConstants;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Single;
-import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Nimrod on 24/06/2017.
  */
 
-public class MoviesListFragment extends Fragment  implements MovieClickedListener
+public class MoviesListFragment extends Fragment implements MovieClickedListener
 {
     // Views
-    ProgressBar m_progressBar;
+    @BindView(R.id.pb_movies) ProgressBar m_progressBar;
+    @BindView(R.id.rv_movies) RecyclerView m_moviesListRecyclerView;
 
     // Variables
-    List<MovieDisplay>  m_movieDisplays;
-    MoviesListAdapter   m_moviesAdapter;
-    RecyclerView        m_moviesListRecyclerView;
+    List<MovieDisplay> _movieDisplays;
+    MoviesListAdapter _moviesAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -67,18 +63,16 @@ public class MoviesListFragment extends Fragment  implements MovieClickedListene
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_movies_list, container, false);
+        ButterKnife.bind(this, v);
+        // TODO : remember to unbind all on destroy!!!! check syntax on butterknife site
 
-        m_progressBar = (ProgressBar) v.findViewById(R.id.pb_movies);
+        _moviesAdapter = new MoviesListAdapter(this);
 
-        m_moviesAdapter = new MoviesListAdapter(this);
-
-        m_moviesListRecyclerView = (RecyclerView) v.findViewById(R.id.rv_movies);
-        m_moviesListRecyclerView.setAdapter(m_moviesAdapter);
-        m_moviesListRecyclerView.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
-        m_moviesListRecyclerView.addItemDecoration(new MoviesListFragment.GridSpacingItemDecoration(2, dpToPx(10), true));
+        m_moviesListRecyclerView.setAdapter(_moviesAdapter);
+        m_moviesListRecyclerView.setLayoutManager(new GridLayoutManager(container.getContext(), 3));
+        m_moviesListRecyclerView.addItemDecoration(new MoviesListFragment.GridSpacingItemDecoration(3, dpToPx(10), true));
         m_moviesListRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // TODO : Check if the movies list is null before we reload
         ShowMoviesList();
 
         return v;
@@ -86,47 +80,32 @@ public class MoviesListFragment extends Fragment  implements MovieClickedListene
 
     public void ShowMoviesList()
     {
-        Single.create((SingleOnSubscribe<List<MovieDetails>>) emitter ->
-        {
-            final MoviesServiceAPI moviesService = MoviesServiceFactory.GetInstance();
-
-            List<MovieDetails> result = moviesService.GetAllMovies().execute().body();
-
-            if (result != null)
-                emitter.onSuccess(result);
-            else
-                emitter.onError(null);
-
-        }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).doOnSubscribe(
-                disposable -> m_progressBar.setVisibility(View.VISIBLE)
-        ).subscribeWith(new DisposableSingleObserver<List<MovieDetails>>()
-        {
-
-            @Override
-            public void onSuccess(@NonNull List<MovieDetails> moviesDetails)
+        if (_movieDisplays == null)
+            MoviesServiceFactory.GetInstance().GetAllMovies().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).doOnSubscribe(
+                    disposable -> m_progressBar.setVisibility(View.VISIBLE)
+            ).subscribe((moviesDetails, throwable) ->
             {
-                m_movieDisplays = new ArrayList<>(moviesDetails.size());
+                m_progressBar.setVisibility(View.GONE);
 
-                for (MovieDetails movie : moviesDetails)
-                    m_movieDisplays.add(new MovieDisplay(movie, null));
+                if (moviesDetails != null)
+                {
+                    _movieDisplays = moviesDetails.stream()
+                            .map(movie -> new MovieDisplay(movie, null))
+                            .collect(Collectors.toList());
 
-                m_moviesAdapter.SetData(m_movieDisplays);
+                    _moviesAdapter.SetData(_movieDisplays);
 
-                LoadMoviesImages(moviesDetails);
+                    LoadMoviesImages(moviesDetails);
+                }
+                else
+                {
+                    Log.d("Movies", "Error retrieving the movies");
 
-                m_progressBar.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onError(Throwable throwable)
-            {
-                Log.d("Movies", "Error retrieving the movies");
-
-                m_progressBar.setVisibility(View.INVISIBLE);
-
-                Toast.makeText(getActivity(), "Failed Loading Movies", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    Toast.makeText(getActivity(), "Failed Loading Movies", Toast.LENGTH_SHORT).show();
+                }
+            });
+        else
+            _moviesAdapter.SetData(_movieDisplays);
     }
 
     public void LoadMoviesImages(final List<MovieDetails> movies)
@@ -149,31 +128,16 @@ public class MoviesListFragment extends Fragment  implements MovieClickedListene
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribeWith(new DisposableObserver<MovieImageArrivedEvent>()
-                {
-                    @Override
-                    public void onNext(@NonNull MovieImageArrivedEvent movieImageArrivedEvent)
-                    {
-                        m_moviesAdapter.SetImageAt(movieImageArrivedEvent.image, movieImageArrivedEvent.position);
-                    }
+                .subscribe(movieImageArrivedEvent ->
+                                _moviesAdapter.SetImageAt(movieImageArrivedEvent.image, movieImageArrivedEvent.position),
+                        exception -> Log.d("Movies", "Failed loading image: " + exception.getMessage()));
 
-                    @Override
-                    public void onError(Throwable throwable)
-                    {
-                        Log.d("Movies", "Failed loading image");// of movie: " + currentMovie.Name);
-                    }
-
-                    @Override
-                    public void onComplete()
-                    {
-                    }
-                });
     }
 
     @Override
     public void OnMovieItemClicked(int position)
     {
-        ((MainActivity)getActivity()).ShowSelectScreeningFragment(m_movieDisplays.get(position));
+        ((MainActivity)getActivity()).ShowSelectScreeningFragment(_movieDisplays.get(position));
     }
 
     public class MovieImageArrivedEvent
