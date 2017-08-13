@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">PashNimCinema</string>
-    <string name="mainTitle">Welcome to PashNim Cinema</string>
+    <string name="app_name">Cinegans</string>
+    <string name="mainTitle">Welcome to Gans Cinema</string>
     <string name="management_action">Management</string>
     <string name="refresh_action">Refresh</string>
     <string name="next_action">Next</string>
@@ -40,6 +40,8 @@
     <string name="illegal_fields">Illegal fields exists</string>
     <string name="selected_screening">Selected Screening: %s</string>
     <string name="description_format">Description: %s</string>
+    <string name="search_hint">Movie Search</string>
+    <string name="purchase_approval_text">Order Number: %s Please save this order number   A purchase summery will be sent to the following email:  %s</string>
 
     <string-array name="Date_of_Screen">
         <item>Sunday</item>

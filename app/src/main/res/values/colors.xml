@@ -5,8 +5,8 @@
     <color name="colorAccent">#ff8f4a</color>
     <color name="viewBg">#e3e3e3</color>
     <color name="movie_title">#272525</color>
-    <color name="fragmentBackground">#e3e3e3</color>
-
+    <color name="fragmentBackground">#979797</color>
+    <color name="movie_details_text">#272525</color>
 
     <color name="image_border_start">#e86703</color>
     <color name="image_border_end">#918888</color>

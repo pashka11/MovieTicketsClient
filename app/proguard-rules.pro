@@ -28,3 +28,9 @@
 -keep @com.mobsandgeeks.saripaar.annotation.ValidateUsing class * {*;}
 #YOU MUST ADD BELOW LINE WITH YOUR PACKAGE!
 -keep class com.javaproject.pashnim.cinema.Validation.TextInputLayoutDataAdapter {*;}
+
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+-keep class android.support.v8.renderscript.** { *; }
