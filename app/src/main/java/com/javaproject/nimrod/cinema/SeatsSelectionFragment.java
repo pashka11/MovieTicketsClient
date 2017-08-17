@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -303,11 +304,10 @@ public class SeatsSelectionFragment extends Fragment implements MainActivity.Dat
                 {
                     _progressBar.setVisibility(View.GONE);
 
-                    if (selectionId != null && !selectionId.isEmpty())
+                    if (!TextUtils.isEmpty(selectionId))
                     {
                         _seatSelectionId = selectionId;
                         ((MainActivity) getActivity()).ShowPurchaseDetailsFragment(selectedSeats, selectionId);
-
                     }
                     else
                     {

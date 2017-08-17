@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.javaproject.nimrod.cinema.Objects.MovieDisplay;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,8 +24,9 @@ import butterknife.ButterKnife;
 
 public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Adapter<MoviesListAdapter.MoviesAdapterViewHolder>
 {
-    List<MovieDisplay> m_moviesList;
+    List<MovieDisplay> _moviesList;
     MovieClickedListener m_listener;
+    private List<MovieDisplay> _displayedMovies;
 
     public MoviesListAdapter(MovieClickedListener listener)
     {
@@ -42,51 +44,59 @@ public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Ad
     @Override
     public void onBindViewHolder(MoviesAdapterViewHolder holder, int position)
     {
-        if (position < m_moviesList.size())
-            holder.bind(m_moviesList.get(position));
+        if (position < _displayedMovies.size())
+            holder.bind(_displayedMovies.get(position));
         else
             Log.d("RecyclerView",
                     "onBindViewHolder: Trying to bind position: " +
                             position +
                             "when data size is: " +
-                            m_moviesList.size());
+                            _moviesList.size());
     }
 
     @Override
     public int getItemCount()
     {
-        return m_moviesList == null ? 0 : m_moviesList.size();
+        return _displayedMovies == null ? 0 : _displayedMovies.size();
     }
 
     public void SetData(List<MovieDisplay> movies)
     {
-        m_moviesList = movies;
+        _moviesList = movies;
+        _displayedMovies = movies;
 
         notifyDataSetChanged();
     }
 
     public void FilterDataByMovieName(String query)
     {
-        // TODO:
-        // first - get movies from the list that match the query,
-        // second - create a new list that contains the data to display
-        // third - set the getItemCount and onBindViewHolder to use the filtered data list
+        _displayedMovies = _moviesList.
+                stream().
+                filter(movie -> movie.MovieDetails.Name.toLowerCase().contains(query.toLowerCase())).
+                collect(Collectors.toList());
 
         notifyDataSetChanged();
     }
 
     public void SetImageAt(Bitmap image, int position)
     {
-        if (position < m_moviesList.size())
-            m_moviesList.get(position).MoviePicture = image;
+        if (position < _moviesList.size())
+            _moviesList.get(position).MoviePicture = image;
 
         notifyItemChanged(position);
     }
 
+    public void ClearFilteredData()
+    {
+        _displayedMovies = _moviesList;
+
+        notifyDataSetChanged();
+    }
+
     class MoviesAdapterViewHolder extends RecyclerView.ViewHolder
     {
-        @BindView(R.id.tv_movie_desc_preview) TextView m_movieTitle;
-        @BindView(R.id.iv_movie_image_preview) ImageView m_moviePicture;
+        @BindView(R.id.tv_movie_desc_preview) TextView _movieTitle;
+        @BindView(R.id.iv_movie_image_preview) ImageView _moviePicture;
         @BindView(R.id.card_view) CardView _cardView;
 
         MoviesAdapterViewHolder(View view)
@@ -95,16 +105,15 @@ public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Ad
 
             ButterKnife.bind(this, view);
 
-            //view.setOnClickListener(v -> m_listener.OnMovieItemClicked(getAdapterPosition()));
-            _cardView.setOnClickListener(v -> m_listener.OnMovieItemClicked(getAdapterPosition()));
+            _cardView.setOnClickListener(v -> m_listener.OnMovieItemClicked(_moviesList.get(getAdapterPosition())));
         }
 
         public void bind(final MovieDisplay movie)
         {
-            m_movieTitle.setText(movie.MovieDetails.Name);
+            _movieTitle.setText(movie.MovieDetails.Name);
 
             if (movie.MoviePicture != null)
-                m_moviePicture.setImageBitmap(movie.MoviePicture);
+                _moviePicture.setImageBitmap(movie.MoviePicture);
         }
 
     }

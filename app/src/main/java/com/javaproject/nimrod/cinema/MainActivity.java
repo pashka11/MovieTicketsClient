@@ -54,10 +54,6 @@ public class MainActivity extends AppCompatActivity
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         if(null != searchManager )
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        // TODO: move this searchView shit to the fragment
-        // https://stackoverflow.com/questions/43580268/searchview-is-not-working-in-fragment - page with searchview in fragment code
-        // searchView.setOnQueryTextListener();
-        // On the callback method call the Adapter.FilterDataByMovieName(query)
 
         searchView.setIconifiedByDefault(false);
 
@@ -73,6 +69,12 @@ public class MainActivity extends AppCompatActivity
             {
                 // Let the child fragment on focus to handle this!!!
                 return false;
+            }
+            case R.id.admin_action:
+            {
+                Intent intent = new Intent(this, ManagementActivity.class);
+                startActivity(intent);
+                return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
@@ -105,7 +107,6 @@ public class MainActivity extends AppCompatActivity
                 .beginTransaction()
                 .add(R.id.container, new MoviesListFragment())
                 /*.addToBackStack(null)*/.commit();
-                // TODO: Check if not adding to stack solved the go back problems
     }
 
     public void ShowSelectScreeningFragment(MovieDisplay movieDisplay)
@@ -165,25 +166,6 @@ public class MainActivity extends AppCompatActivity
     public Screening getSelectedScreening()
     {
         return _selectedScreening;
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        setIntent(intent);
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            SearchMovies(query);
-        }
-    }
-
-    private void SearchMovies(String query)
-    {
-        // TODO :: Search movies with the query,
-        // TODO: pass the movies to the movies list fragment and then to adapter
     }
 
     public interface DataReceiver

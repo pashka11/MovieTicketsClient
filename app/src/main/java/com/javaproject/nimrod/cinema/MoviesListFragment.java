@@ -10,14 +10,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
@@ -75,7 +78,6 @@ public class MoviesListFragment extends Fragment implements MovieClickedListener
         m_moviesListRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         ShowMoviesList();
-
 
         return v;
     }
@@ -147,9 +149,9 @@ public class MoviesListFragment extends Fragment implements MovieClickedListener
     }
 
     @Override
-    public void OnMovieItemClicked(int position)
+    public void OnMovieItemClicked(MovieDisplay movie)
     {
-        ((MainActivity)getActivity()).ShowSelectScreeningFragment(_movieDisplays.get(position));
+        ((MainActivity)getActivity()).ShowSelectScreeningFragment(movie);
     }
 
     public class MovieImageArrivedEvent
@@ -164,12 +166,41 @@ public class MoviesListFragment extends Fragment implements MovieClickedListener
         }
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-//    {
-//        inflater.inflate(R.menu.menu_ticket_order_process,menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        //inflater.inflate(R.menu.menu_ticket_order_process,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
+        SearchView searchView  = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+
+        {
+            @Override
+            public boolean onQueryTextSubmit(String query)
+            {
+                _moviesAdapter.FilterDataByMovieName(query);
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                if (TextUtils.isEmpty(newText)){
+                    _moviesAdapter.ClearFilteredData();
+
+                    return true;
+                }
+
+                return false;
+            }
+
+
+        });
+    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu)
@@ -188,12 +219,6 @@ public class MoviesListFragment extends Fragment implements MovieClickedListener
     {
         switch (item.getItemId())
         {
-            case R.id.admin_action:
-            {
-                Toast.makeText(getActivity(), "Admin", Toast.LENGTH_SHORT).show();
-
-                break;
-            }
             case R.id.refresh_action:
             {
                 ShowMoviesList(true);

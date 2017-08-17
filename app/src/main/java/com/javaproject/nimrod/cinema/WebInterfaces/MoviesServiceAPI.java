@@ -31,7 +31,7 @@ public interface MoviesServiceAPI
     Call<MovieDetails> GetMovie(@Path(WebApiConstants.Movies.MovieId) String id);
 
     @POST(WebApiConstants.Movies.RelativeUrl)
-    Call<ResponseBody> AddMovie(@Body MovieDetails movie);
+    Single<ResponseBody> AddMovie(@Body MovieDetails movie);
 
     @GET(WebApiConstants.Images.RelativeGetImage)
     Call<ResponseBody> GetMoviePicture(@Path(WebApiConstants.Images.ImageName) String name);

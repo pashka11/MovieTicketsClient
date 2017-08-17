@@ -15,4 +15,12 @@
         <item name="android:scaleType">fitCenter</item>
     </style>
 
+    <style name="textTheme" parent="android:Theme">
+        <item name="android:textViewStyle">@style/MyTextView</item>
+    </style>
+
+    <style name="MyTextView" parent="Widget.Design.TextInputLayout">
+        <item name="android:textSize">60sp</item>
+    </style>
+
 </resources>

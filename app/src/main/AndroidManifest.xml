@@ -19,19 +19,19 @@
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.SEARCH" />
+                <!--<action android:name="android.intent.action.SEARCH" />-->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                       android:resource="@xml/searchable"/>
+            <!--<meta-data android:name="android.app.searchable"-->
+                       <!--android:resource="@xml/searchable"/>-->
         </activity>
-        <!--<activity-->
-            <!--android:name=".MovieDescriptionActivity"-->
-            <!--android:parentActivityName=".MainActivity">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="com.javaproject.pashnim.cinema.MainActivity" />-->
-        <!--</activity>-->
+        <activity
+            android:name=".ManagementActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.javaproject.nimrod.cinema.MainActivity" />
+        </activity>
 
     </application>
 </manifest>

@@ -42,6 +42,25 @@
     <string name="description_format">Description: %s</string>
     <string name="search_hint">Movie Search</string>
     <string name="purchase_approval_text">Order Number: %s Please save this order number   A purchase summery will be sent to the following email:  %s</string>
+    <string name="movie_search">Movie Search</string>
+    <string name="add_movie_btn">Add Movie</string>
+
+    // Management add items hints
+    // Purchase fields Hints
+    <string name="movie_name_hint">Name</string>
+    <string name="duration_hint">Duration</string>
+    <string name="actors_hint">Actors</string>
+    <string name="director_hint">Director</string>
+    <string name="release_date_hint">Release Year</string>
+    <string name="genres_hint">Genres</string>
+    <string name="description_hint">Description</string>
+
+    // Errors
+    <string name="actors_field_error">Actors should be names separated by \',\'</string>
+    <string name="duration_field_error">Duration should be in minuts with 2/3 digits</string>
+    <string name="genres_field_error">Actors should be names separated by \',\'</string>
+    <string name="failed_adding_movie">Failed adding movie</string>
+    <string name="operation_success_add_movie">Movie added successfuly</string>
 
     <string-array name="Date_of_Screen">
         <item>Sunday</item>
