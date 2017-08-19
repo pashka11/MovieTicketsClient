@@ -229,6 +229,7 @@ public class AddMovieFragment extends Fragment implements Validator.ValidationLi
                     {
                         Snackbar addMovieSnack = Snackbar.make(getView(), R.string.failed_adding_movie, Snackbar.LENGTH_LONG);
                         addMovieSnack.setAction(R.string.retry, v -> OnAddMovieClicked());
+                        addMovieSnack.show();
                     }
                     else
                     {
@@ -328,6 +329,7 @@ public class AddMovieFragment extends Fragment implements Validator.ValidationLi
 
     private void ClearAll()
     {
+        // Clear fields
         _movieName.getEditText().setText("");
         _actors.getEditText().setText("");
         _releaseDate.getEditText().setText("");
@@ -337,6 +339,9 @@ public class AddMovieFragment extends Fragment implements Validator.ValidationLi
         _imageName.setText("");
         _selectedImageData = null;
         _genres.getEditText().setText("");
+
+        // Lose focus from everything
+        getActivity().getCurrentFocus().clearFocus();
     }
 }
 

@@ -14,14 +14,14 @@
                   android:weightSum="1">
 
         <TextView
-            android:id="@+id/tv_add_screening_title"
+            android:id="@+id/tv_add_hall_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:gravity="center"
             android:paddingBottom="10dp"
             android:layout_weight="0"
-            android:text="Add Screening - Details:"/>
+            android:text="Add Hall - Details:"/>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,37 +33,7 @@
                 android:orientation="vertical">
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/til_screening_date"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/tiet_screening_date"
-                        android:textSize="@dimen/add_item_details_field"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:hint="@string/screening_date_hint"
-                        android:inputType="date"/>
-                </android.support.design.widget.TextInputLayout>
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/til_screening_time"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/tiet_screening_time"
-                        android:textSize="@dimen/add_item_details_field"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:hint="@string/screening_time_hint"
-                        android:inputType="time"/>
-                </android.support.design.widget.TextInputLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/til_screening_price"
+                    android:id="@+id/til_hall_id"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -72,38 +42,48 @@
                         android:textSize="@dimen/add_item_details_field"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
-                        android:hint="@string/price_hint"
+                        android:hint="@string/hall_id_hint"
+                        android:maxLength="2"
                         android:inputType="number"/>
                 </android.support.design.widget.TextInputLayout>
 
-                <Spinner
-                    android:id="@+id/sp_hall"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_hall_rows_num"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/spinner_top_bottom_padding"
-                    android:paddingTop="@dimen/spinner_top_bottom_padding"
-                    android:spinnerMode="dialog"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    android:backgroundTint="@color/colorPrimary"/>
+                    android:layout_height="wrap_content">
 
-                <Spinner
-                    android:id="@+id/sp_movie"
+                    <android.support.design.widget.TextInputEditText
+                        android:textSize="@dimen/add_item_details_field"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:hint="@string/rows_count_hint"
+                        android:maxLength="2"
+                        android:inputType="number"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_hall_seats_in_row"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/spinner_top_bottom_padding"
-                    android:paddingTop="@dimen/spinner_top_bottom_padding"
-                    android:spinnerMode="dialog"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    android:backgroundTint="@color/colorPrimary"
-                    />
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:textSize="@dimen/add_item_details_field"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:hint="@string/seat_count_hint"
+                        android:maxLength="2"
+                        android:inputType="number"/>
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
         </ScrollView>
         <Button
-            android:id="@+id/btn_add_screening"
+            android:id="@+id/btn_add_hall"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:text="@string/add_screening_btn"
+            android:text="@string/add_hall_btn"
             android:layout_weight="0"/>
 
     </LinearLayout>

@@ -92,7 +92,20 @@ public class SeatsSelectionFragment extends Fragment implements MainActivity.Dat
 
         _seatsView.setAdapter(new SeatsAdapter());
 
+        InitSeatsSelection();
+
         return v;
+    }
+
+    private void InitSeatsSelection()
+    {
+        if (_seats != null)
+            _seats.forEach(row ->
+            {
+                for (int seat = 0; seat < row.Seats.size(); seat++)
+                    if (row.Seats.get(seat) == SeatState.Chosen.getValue())
+                        row.Seats.set(seat, SeatState.Free.getValue());
+            });
     }
 
     @OnItemClick(R.id.gv_seats)
@@ -127,7 +140,7 @@ public class SeatsSelectionFragment extends Fragment implements MainActivity.Dat
                 .append(_chosenMovie.Name).append("\n")
                 .append("Hall ").append(screening.HallId)//.append("\n")
                 //.append("Screening Date: ")
-        .append(" at ").append(screening.Time.toString("HH:mm dd/MM/yyyy ")).toString();
+                .append(" at ").append(screening.Time.toString("HH:mm dd/MM/yyyy ")).toString();
     }
 
     @Override

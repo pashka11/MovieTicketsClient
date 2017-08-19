@@ -13,6 +13,8 @@ import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -45,8 +47,9 @@ public interface MoviesServiceAPI
     @POST(WebApiConstants.Screenings.SaveSeats)
     Single<String> SaveSelectedSeats(@Path(WebApiConstants.Screenings.ScreeningId) String screeningId, @Body List<Seat> seats);
 
+    @FormUrlEncoded
     @PUT(WebApiConstants.Screenings.SaveSeats)
-    Single<ResponseBody> CancelSeatSelection(@Path(WebApiConstants.Screenings.ScreeningId) String screeningId, @Body String selectionId);
+    Single<ResponseBody> CancelSeatSelection(@Path(WebApiConstants.Screenings.ScreeningId) String screeningId, @Field("selectionId") String selectionId);
 
     @POST(WebApiConstants.Purchases.RelativeUrl)
     Single<String> MakePurchase(@Body PurchaseRequest request);
@@ -60,4 +63,6 @@ public interface MoviesServiceAPI
 
     @POST(WebApiConstants.Screenings.RelativeUrl)
     Single<String> AddScreening(@Body Screening screening);
+    @POST(WebApiConstants.Halls.RelativeUrl)
+    Single<String> AddHall(@Body Hall hall);
 }

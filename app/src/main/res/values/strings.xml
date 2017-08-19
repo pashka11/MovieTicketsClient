@@ -75,15 +75,32 @@
     <string name="screening_date_hint">Screening Date</string>
     <string name="add_screening_btn">Add Screening</string>
     <string name="release_date_format">dd/MM/yyyy</string>
-    <string name="operation_success_add_screening">Screening added successfully</string>
 
     // Success
+    <string name="operation_success_add_screening">Screening added successfully</string>
 
     // Errors
     <string name="failed_adding_screening">Failed adding screening</string>
     <string name="price_field_error">Price can be maximum 3 digits</string>
+    <string name="hall_id_hint">Hall Number</string>
+    <string name="seat_count_hint">Seats Count</string>
+    <string name="rows_count_hint">Rows Count</string>
+    <string name="add_hall_btn">Add Hall</string>
+
 
     ///////////////////////////////////////////////////////////////////
+    /// Halls management
+
+    // Success
+    <string name="operation_success_add_hall">Hall created successfully</string>
+
+    // Error
+    <string name="failed_adding_hall">Failed adding hall</string>
+    <string name="row_col_count_field_error">Should be a value between 5 to 30</string>
+
+
+    /////////////////////////////////////////////////////////////////////
+
     <string-array name="Date_of_Screen">
         <item>Sunday</item>
         <item>Monday</item>

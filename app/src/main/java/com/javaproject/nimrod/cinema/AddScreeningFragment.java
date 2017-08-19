@@ -190,8 +190,9 @@ public class AddScreeningFragment extends Fragment implements Validator.Validati
                 .subscribe((s, throwable) -> {
                     if (throwable != null)
                     {
-                        Snackbar addMovieSnack = Snackbar.make(getView(), R.string.failed_adding_movie, Snackbar.LENGTH_LONG);
-                        addMovieSnack.setAction(R.string.retry, v -> OnAddScreeningClicked());
+                        Snackbar addScreeningSnack = Snackbar.make(getView(), R.string.failed_adding_screening, Snackbar.LENGTH_LONG);
+                        addScreeningSnack.setAction(R.string.retry, v -> OnAddScreeningClicked());
+                        addScreeningSnack.show();
                     }
                     else
                     {
@@ -216,6 +217,9 @@ public class AddScreeningFragment extends Fragment implements Validator.Validati
         _screeningDateView.getEditText().setText("");
         _screeningTimeView.getEditText().setText("");
         _priceView.getEditText().setText("");
+
+        // Lose focus from everything
+        getActivity().getCurrentFocus().clearFocus();
     }
 
     private Screening ConstructScreeningObject()

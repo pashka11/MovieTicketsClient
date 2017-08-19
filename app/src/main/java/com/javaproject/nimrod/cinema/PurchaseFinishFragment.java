@@ -226,7 +226,6 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
         {
             case android.R.id.home:
             {
-                // TODO : DELETE function cannot have body, either create a new resource : SeatsSelectionResource in server or change this function to put instead of delete
                 MoviesServiceFactory.GetInstance().CancelSeatSelection(_selectedScreening.Id, _seatsSelectionId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
