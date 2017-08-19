@@ -45,10 +45,10 @@ public class ScreeningSelectionFragment extends Fragment implements DatePickerDi
     MovieDetails m_displayedMovie;
     Bitmap m_savedImageBitmap;
 
-    List<Screening> m_allScreenings;
-    List<Screening> m_selectedDayScreenings;
-    MonthAdapter.CalendarDay m_selectedDay;
-    Screening m_selectedScreening;
+    List<Screening> _allScreenings;
+    List<Screening> _selectedDayScreenings;
+    MonthAdapter.CalendarDay _selectedDay;
+    Screening _selectedScreening;
 
     @BindView(R.id.iv_movie_image) ImageView _movieImage;
     @BindView(R.id.tv_movie_title) TextView _movieTitle;
@@ -107,9 +107,9 @@ public class ScreeningSelectionFragment extends Fragment implements DatePickerDi
                 now.get(Calendar.DAY_OF_MONTH)
         );
 
-        if (m_allScreenings != null)
+        if (_allScreenings != null)
         {
-            dpd.setSelectableDays(m_allScreenings.stream()
+            dpd.setSelectableDays(_allScreenings.stream()
                     .map(screening ->
                     {
                         Calendar cal = Calendar.getInstance();
@@ -132,7 +132,7 @@ public class ScreeningSelectionFragment extends Fragment implements DatePickerDi
                 .subscribe((screenings, throwable) ->
                 {
                     if (screenings != null)
-                        m_allScreenings = screenings;
+                        _allScreenings = screenings;
                     else
                         Toast.makeText(getActivity(), "Failed Loading Screenings", Toast.LENGTH_SHORT).show();
                 });
@@ -152,9 +152,9 @@ public class ScreeningSelectionFragment extends Fragment implements DatePickerDi
 
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth)
     {
-        m_selectedDay = view.getSelectedDay();
+        _selectedDay = view.getSelectedDay();
 
-        m_selectedDayScreenings = m_allScreenings
+        _selectedDayScreenings = _allScreenings
                 .parallelStream().filter(screening ->
                         (screening.Time.toLocalDate().isEqual(new LocalDate(year, monthOfYear, dayOfMonth))))
                 .collect(Collectors.toList());
@@ -171,27 +171,23 @@ public class ScreeningSelectionFragment extends Fragment implements DatePickerDi
         builder.setNegativeButton("Cancel", (dialog, id) ->
                 Toast.makeText(getContext(), R.string.screening_selection_canceled, Toast.LENGTH_SHORT).show());
 
-        String[] selectedTimes = m_selectedDayScreenings.stream()
+        String[] selectedTimes = _selectedDayScreenings.stream()
                 .map(screening -> screening.Time.toString(ISODateTimeFormat.hourMinute()))
                 .toArray(String[]::new);
 
         builder.setItems(selectedTimes, (dialog, which) ->
         {
-            m_selectedScreening = m_selectedDayScreenings.get(which);
+            _selectedScreening = _selectedDayScreenings.get(which);
+
             _selectedScreeningView.setText(
                     String.format(getString(R.string.selected_screening),
-                            m_selectedScreening.Time.toString("dd/MM/yyyy - HH:mm")));
+                            _selectedScreening.Time.toString("dd/MM/yyyy - HH:mm")));
+
+            _selectedScreeningView.setVisibility(View.VISIBLE);
         });
 
         builder.create().show();
     }
-
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-//    {
-//        inflater.inflate(R.menu.menu_ticket_order_process,menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu)
@@ -219,9 +215,9 @@ public class ScreeningSelectionFragment extends Fragment implements DatePickerDi
             }
             case R.id.next_action:
             {
-                if (m_selectedScreening != null)
+                if (_selectedScreening != null)
                     try                    {
-                        ((MainActivity)getActivity()).ShowSelectSeatsFragment(m_selectedScreening);
+                        ((MainActivity)getActivity()).ShowSelectSeatsFragment(_selectedScreening);
                     } catch (Exception e)                    {
                         e.printStackTrace();
                     }

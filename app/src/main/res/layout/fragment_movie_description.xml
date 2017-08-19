@@ -13,9 +13,11 @@
     <ImageView
         android:id="@+id/iv_movie_image"
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/movie_picture"
+        android:scaleType="fitCenter"
         style="@style/myImageView"
         android:layout_weight="0"/>
 
@@ -103,6 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0"/>
+        android:layout_weight="0"
+        android:visibility="gone"/>
 
 </LinearLayout>

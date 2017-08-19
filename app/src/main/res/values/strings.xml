@@ -56,11 +56,14 @@
     <string name="description_hint">Description</string>
 
     // Errors
-    <string name="actors_field_error">Actors should be names separated by \',\'</string>
+    <string name="actors_field_error">Actors should be names separated by \' , \'</string>
     <string name="duration_field_error">Duration should be in minuts with 2/3 digits</string>
-    <string name="genres_field_error">Actors should be names separated by \',\'</string>
+    <string name="genres_field_error">Genres should be genre names separated by \' , \'</string>
     <string name="failed_adding_movie">Failed adding movie</string>
-    <string name="operation_success_add_movie">Movie added successfuly</string>
+    <string name="operation_success_add_movie">Movie added successfully</string>
+    <string name="retry">Retry</string>
+    <string name="release_date_format">dd/MM/yyyy</string>
+
 
     <string-array name="Date_of_Screen">
         <item>Sunday</item>

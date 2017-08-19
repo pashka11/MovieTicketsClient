@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -77,17 +78,17 @@ public class MoviesListFragment extends Fragment implements MovieClickedListener
         m_moviesListRecyclerView.addItemDecoration(new MoviesListFragment.GridSpacingItemDecoration(3, dpToPx(10), true));
         m_moviesListRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        ShowMoviesList();
+        LoadMoviesList();
 
         return v;
     }
 
-    public void ShowMoviesList()
+    public void LoadMoviesList()
     {
-        ShowMoviesList(false);
+        LoadMoviesList(false);
     }
 
-    public void ShowMoviesList(boolean forceLoad)
+    public void LoadMoviesList(boolean forceLoad)
     {
         if (forceLoad || _movieDisplays == null)
             MoviesServiceFactory.GetInstance().GetAllMovies().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).doOnSubscribe(
@@ -115,7 +116,10 @@ public class MoviesListFragment extends Fragment implements MovieClickedListener
                 {
                     Log.d("Movies", "Error retrieving the movies");
 
-                    Toast.makeText(getActivity(), "Failed Loading Movies", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(),
+                            "Failed Loading Movies", Toast.LENGTH_SHORT)
+                            .setAction(R.string.retry, v -> LoadMoviesList(true))
+                            .show();
                 }
             });
         else
@@ -221,7 +225,7 @@ public class MoviesListFragment extends Fragment implements MovieClickedListener
         {
             case R.id.refresh_action:
             {
-                ShowMoviesList(true);
+                LoadMoviesList(true);
 
                 break;
             }
