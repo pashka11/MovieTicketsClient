@@ -46,7 +46,7 @@
     <string name="add_movie_btn">Add Movie</string>
 
     // Management add items hints
-    // Purchase fields Hints
+    // Movie fields Hints
     <string name="movie_name_hint">Name</string>
     <string name="duration_hint">Duration</string>
     <string name="actors_hint">Actors</string>
@@ -55,16 +55,35 @@
     <string name="genres_hint">Genres</string>
     <string name="description_hint">Description</string>
 
+    // Success
+    <string name="operation_success_add_movie">Movie added successfully</string>
+
     // Errors
     <string name="actors_field_error">Actors should be names separated by \' , \'</string>
     <string name="duration_field_error">Duration should be in minuts with 2/3 digits</string>
     <string name="genres_field_error">Genres should be genre names separated by \' , \'</string>
     <string name="failed_adding_movie">Failed adding movie</string>
-    <string name="operation_success_add_movie">Movie added successfully</string>
+
+
     <string name="retry">Retry</string>
+
+
+    /// Add Screening /////////////////////////////////////////////////
+    // hints
+    <string name="price_hint">Ticket Price</string>
+    <string name="screening_time_hint">Screening Time</string>
+    <string name="screening_date_hint">Screening Date</string>
+    <string name="add_screening_btn">Add Screening</string>
     <string name="release_date_format">dd/MM/yyyy</string>
+    <string name="operation_success_add_screening">Screening added successfully</string>
 
+    // Success
 
+    // Errors
+    <string name="failed_adding_screening">Failed adding screening</string>
+    <string name="price_field_error">Price can be maximum 3 digits</string>
+
+    ///////////////////////////////////////////////////////////////////
     <string-array name="Date_of_Screen">
         <item>Sunday</item>
         <item>Monday</item>

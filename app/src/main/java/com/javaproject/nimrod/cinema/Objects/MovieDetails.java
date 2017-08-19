@@ -42,4 +42,10 @@ public class MovieDetails implements Serializable
     public int Duration;
     public String Genres;
     public String Actors;
+
+    @Override
+    public String toString()
+    {
+        return Name;
+    }
 }

@@ -140,7 +140,7 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
                             if (s != null)
                                 ShowPurchaseCompletionDialog(s);
                             else
-                                Snackbar.make(getView(), "Failed making purchase", Snackbar.LENGTH_LONG);
+                                Snackbar.make(getView(), "Failed making purchase", Snackbar.LENGTH_LONG).show();
                         }
                 );
     }
@@ -235,13 +235,13 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
                         .subscribe((responseBody, throwable) ->
                         {
                             if (throwable != null)
-                                Snackbar.make(this.getView(),
+                                Snackbar.make(getView(),
                                         "Failed canceling seats selection \n seats will not be available for the rest of the waiting time",
-                                        Snackbar.LENGTH_SHORT);
-                        });
+                                        Snackbar.LENGTH_SHORT).show();
 
-                // Tell the activity back was pressed
-                getActivity().onBackPressed();
+                            // Tell the activity back was pressed
+                            getActivity().onBackPressed();
+                        });
 
                 return true;
             }

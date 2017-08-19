@@ -114,7 +114,7 @@ public class ScreeningSelectionFragment extends Fragment implements DatePickerDi
                     {
                         Calendar cal = Calendar.getInstance();
                         cal.set(screening.Time.getYear(),
-                                screening.Time.getMonthOfYear(),
+                                screening.Time.getMonthOfYear() - 1,
                                 screening.Time.getDayOfMonth());
                         return cal;
                     })
@@ -134,7 +134,7 @@ public class ScreeningSelectionFragment extends Fragment implements DatePickerDi
                     if (screenings != null)
                         _allScreenings = screenings;
                     else
-                        Toast.makeText(getActivity(), "Failed Loading Screenings", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Failed Loading Screenings", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -156,7 +156,7 @@ public class ScreeningSelectionFragment extends Fragment implements DatePickerDi
 
         _selectedDayScreenings = _allScreenings
                 .parallelStream().filter(screening ->
-                        (screening.Time.toLocalDate().isEqual(new LocalDate(year, monthOfYear, dayOfMonth))))
+                        (screening.Time.toLocalDate().isEqual(new LocalDate(year, monthOfYear + 1, dayOfMonth))))
                 .collect(Collectors.toList());
 
         ShowSelectedScreeningTimeDialog();

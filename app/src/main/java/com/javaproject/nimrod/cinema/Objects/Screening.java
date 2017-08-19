@@ -31,5 +31,10 @@ public class Screening
         this.Price = price;
         this.Seats = seats;
     }
+
+    public Screening(String movieId, LocalDateTime screeningTime, String hallId, int price, ArrayList<Row> seats)
+    {
+        this ("", movieId, screeningTime, hallId, price, seats);
+    }
 }
 

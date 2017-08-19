@@ -21,8 +21,8 @@ public final class WebApiConstants
     public final class Screenings
     {
         public final static String ScreeningId = "id";
-        public final static String BaseScreeningsUrl = "screenings";
-        public final static String SpecificScreening = BaseScreeningsUrl + "/{" + ScreeningId + "}";
+        public final static String RelativeUrl = "screenings";
+        public final static String SpecificScreening = RelativeUrl + "/{" + ScreeningId + "}";
         public final static String SaveSeats = SpecificScreening + "/seats/save";
     }
 
@@ -40,5 +40,13 @@ public final class WebApiConstants
         public final static String Url = BaseUrl  + RelativeUrl;
         public final static String PurchaseId = "purchaseId";
         public final static String RelativeGetPurchase = RelativeUrl + "/{" + PurchaseId + "}";
+    }
+
+    public class Halls
+    {
+        public final static String RelativeUrl = "halls";
+        public final static String Url = BaseUrl  + RelativeUrl;
+        public final static String HallId = "hallId";
+        public final static String RelativeGetHall = RelativeUrl + "/{" + HallId + "}";
     }
 }

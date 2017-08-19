@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Validation.TextInputLayoutDataAdapter;
@@ -64,7 +63,7 @@ import static android.app.Activity.RESULT_OK;
 public class AddMovieFragment extends Fragment implements Validator.ValidationListener
 {
     // Add fields
-    @BindView(R.id.til_release_date) @Future(dateFormatResId = R.string.release_date_format)
+    @BindView(R.id.til_release_date) @NotEmpty(messageResId = R.string.empty_field_error) @Future(dateFormatResId = R.string.release_date_format)
     TextInputLayout _releaseDate;
     @BindView(R.id.til_movie_name) @NotEmpty(messageResId = R.string.empty_field_error)
     TextInputLayout _movieName;
@@ -233,7 +232,8 @@ public class AddMovieFragment extends Fragment implements Validator.ValidationLi
                     }
                     else
                     {
-                        Snackbar.make(getView(), R.string.operation_success_add_movie, Toast.LENGTH_LONG).show();
+                        Snackbar.make(getView(), R.string.operation_success_add_movie, Snackbar.LENGTH_LONG).show();
+                        ClearAll();
                     }
                 });
     }
@@ -316,12 +316,27 @@ public class AddMovieFragment extends Fragment implements Validator.ValidationLi
         _releaseDate.setError(null);
         _duration.setError(null);
         _director.setError(null);
+        _genres.setError(null);
 
         _movieName.setErrorEnabled(false);
         _actors.setErrorEnabled(false);
         _releaseDate.setErrorEnabled(false);
         _duration.setErrorEnabled(false);
         _director.setErrorEnabled(false);
+        _genres.setErrorEnabled(false);
+    }
+
+    private void ClearAll()
+    {
+        _movieName.getEditText().setText("");
+        _actors.getEditText().setText("");
+        _releaseDate.getEditText().setText("");
+        _duration.getEditText().setText("");
+        _director.getEditText().setText("");
+        _wasImageUploaded = false;
+        _imageName.setText("");
+        _selectedImageData = null;
+        _genres.getEditText().setText("");
     }
 }
 
