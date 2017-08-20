@@ -13,4 +13,5 @@ public class PurchaseRequest
 	public String GivenName;
 	public String LastName;
 	public String PhoneNumber;
+	public int TotalPrice;
 }

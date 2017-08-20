@@ -67,6 +67,7 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
     private String _purchaseSummery;
     private String _seatsSelectionId;
     private Screening _selectedScreening;
+    private int _totalPrice;
 
     @Nullable
     @Override
@@ -94,7 +95,7 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
         setHasOptionsMenu(true);
     }
 
-    private String ConstructPurchaseSummery(MovieDetails movie, Screening scr, List<Seat> selectedSeats)
+    private String ConstructPurchaseSummery(MovieDetails movie, Screening scr, List<Seat> selectedSeats,int price)
     {
         StringBuilder builder = new StringBuilder();
         builder.append(movie.Name).append(" , Hall ").append(scr.HallId)
@@ -107,7 +108,7 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
                         " Seat " +
                         seat.SeatNumber)
                 .collect(Collectors.joining(", ")));
-
+        builder.append("\n\n Total Price:  ").append(price);
         return builder.toString();
     }
 
@@ -127,11 +128,8 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
         request.PhoneNumber = _phoneNumber.getEditText().getText().toString();
         request.ScreeningId = _selectedScreening.Id;
         request.SeatsSelectionId = _seatsSelectionId;
-
-        // TODO : add price to the app
-
-        // TODO add credit card shit to the object
-
+        request.TotalPrice = _totalPrice;
+        
         // Send server request and wait.
         MoviesServiceFactory.GetInstance().MakePurchase(request).
                 subscribeOn(Schedulers.io()).
@@ -139,10 +137,16 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
                 subscribe((s, throwable) -> {
                             if (s != null)
                                 ShowPurchaseCompletionDialog(s);
+
+
+
+
                             else
                                 Snackbar.make(getView(), "Failed making purchase", Snackbar.LENGTH_LONG).show();
                         }
                 );
+
+
     }
 
     private void ShowPurchaseCompletionDialog(String selectionId)
@@ -266,8 +270,9 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
             MovieDetails movie = (MovieDetails) obj2;
             List<Seat> selectedSeats = (List<Seat>) obj3;
             _seatsSelectionId = (String) obj4;
+            _totalPrice = _selectedScreening.Price * selectedSeats.size();
 
-            _purchaseSummery = ConstructPurchaseSummery(movie, _selectedScreening, selectedSeats);
+            _purchaseSummery = ConstructPurchaseSummery(movie, _selectedScreening, selectedSeats,_totalPrice);
 
             if (_purchaseSummeryView != null)
                 _purchaseSummeryView.setText(_purchaseSummery);
