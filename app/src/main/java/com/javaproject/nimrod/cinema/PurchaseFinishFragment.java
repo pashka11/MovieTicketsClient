@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.javaproject.nimrod.cinema.Interfaces.DataReceiver;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Objects.PurchaseRequest;
 import com.javaproject.nimrod.cinema.Objects.Screening;
@@ -45,7 +46,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Nimrod on 06/08/2017.
  */
 
-public class PurchaseFinishFragment extends Fragment implements Validator.ValidationListener, MainActivity.DataReceiver
+public class PurchaseFinishFragment extends Fragment implements Validator.ValidationListener, DataReceiver
 {
     private Validator _validator;
 
@@ -121,6 +122,8 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
     @Override
     public void onValidationSucceeded()
     {
+        ClearErrorOnAllFields();
+
         PurchaseRequest request = new PurchaseRequest();
         request.Email = _emailAddress.getEditText().getText().toString();
         request.GivenName = _givenName.getEditText().getText().toString();
@@ -137,10 +140,6 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
                 subscribe((s, throwable) -> {
                             if (s != null)
                                 ShowPurchaseCompletionDialog(s);
-
-
-
-
                             else
                                 Snackbar.make(getView(), "Failed making purchase", Snackbar.LENGTH_LONG).show();
                         }

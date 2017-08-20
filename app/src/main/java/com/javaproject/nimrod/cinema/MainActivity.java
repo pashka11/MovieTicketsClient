@@ -168,8 +168,5 @@ public class MainActivity extends AppCompatActivity
         return _selectedScreening;
     }
 
-    public interface DataReceiver
-    {
-        void PassData(Object ... objects) throws Exception;
-    }
+
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="10dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hall id"
+        style="@style/InputLabel"
+        android:visibility="gone"/>
+    <Spinner
+        android:id="@+id/sp_halls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/spinner_top_bottom_padding"
+        android:spinnerMode="dialog"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:backgroundTint="@color/colorPrimary"/>
+
+    <Button
+        android:id="@+id/btn_delete_hall"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="@string/delete_hall_btn"/>
+</LinearLayout>

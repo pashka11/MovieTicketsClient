@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="10dp">
+
+    <Spinner
+        android:id="@+id/sp_movies_for_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/spinner_top_bottom_padding"
+        android:paddingTop="@dimen/spinner_top_bottom_padding"
+        android:spinnerMode="dialog"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:backgroundTint="@color/colorPrimary"/>
+
+    <Spinner
+        android:id="@+id/sp_screenings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/spinner_top_bottom_padding"
+        android:paddingTop="@dimen/spinner_top_bottom_padding"
+        android:spinnerMode="dialog"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:backgroundTint="@color/colorPrimary"/>
+
+    <Button
+        android:id="@+id/btn_delete_screening"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="@string/delete_screening_btn"/>
+
+</LinearLayout>

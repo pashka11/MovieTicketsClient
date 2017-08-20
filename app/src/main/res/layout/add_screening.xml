@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:layout_height="match_parent"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:padding="10dp"
+              android:background="@color/viewBg"
+              android:weightSum="1"
+              xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/tv_add_screening_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:layout_weight="0"
+        android:text="Add Screening - Details:"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+        <LinearLayout
+            android:focusableInTouchMode="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_screening_date"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tiet_screening_date"
+                    android:textSize="@dimen/add_item_details_field"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/screening_date_hint"
+                    android:inputType="date"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_screening_time"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tiet_screening_time"
+                    android:textSize="@dimen/add_item_details_field"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/screening_time_hint"
+                    android:inputType="time"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_screening_price"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:textSize="@dimen/add_item_details_field"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/price_hint"
+                    android:inputType="number"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <Spinner
+                android:id="@+id/sp_halls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/spinner_top_bottom_padding"
+                android:paddingTop="@dimen/spinner_top_bottom_padding"
+                android:spinnerMode="dialog"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:backgroundTint="@color/colorPrimary"/>
+
+            <Spinner
+                android:id="@+id/sp_movies_for_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/spinner_top_bottom_padding"
+                android:paddingTop="@dimen/spinner_top_bottom_padding"
+                android:spinnerMode="dialog"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:backgroundTint="@color/colorPrimary"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/btn_add_screening"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="@string/add_screening_btn"
+        android:layout_weight="0"/>
+
+</LinearLayout>

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Nimrod on 13/06/2017.
@@ -104,8 +105,12 @@ public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Ad
             super(view);
 
             ButterKnife.bind(this, view);
+        }
 
-            _cardView.setOnClickListener(v -> m_listener.OnMovieItemClicked(_moviesList.get(getAdapterPosition())));
+        @OnClick({R.id.card_view, R.id.iv_movie_image_preview, R.id.tv_movie_desc_preview})
+        public void OnChooseMovieClicked()
+        {
+            m_listener.OnMovieItemClicked(_moviesList.get(getAdapterPosition()));
         }
 
         public void bind(final MovieDisplay movie)

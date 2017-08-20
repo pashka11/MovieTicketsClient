@@ -12,11 +12,15 @@ import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.javaproject.nimrod.cinema.Interfaces.DataReceiver;
+import com.javaproject.nimrod.cinema.Interfaces.HallsChangedListener;
+import com.javaproject.nimrod.cinema.Interfaces.MoviesChangedListener;
 import com.javaproject.nimrod.cinema.Objects.Hall;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Objects.Screening;
@@ -24,9 +28,10 @@ import com.javaproject.nimrod.cinema.Validation.TextInputLayoutDataAdapter;
 import com.javaproject.nimrod.cinema.WebInterfaces.MoviesServiceFactory;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Digits;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
+
+import net.cachapa.expandablelayout.ExpandableLayout;
 
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
@@ -45,28 +50,47 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Nimrod on 17/08/2017.
  */
 
-public class AddScreeningFragment extends Fragment implements Validator.ValidationListener
+public class ManageScreeningFragment extends Fragment implements Validator.ValidationListener, DataReceiver
 {
+
+
+
+    // Members
     private Validator _validator;
     private List<MovieDetails> _moviesList;
     private List<Hall> _hallsList;
     private LocalDateTime _screeningDateTime;
+    private List<Screening> _screeningsForMovie;
+    private ArrayAdapter<Hall> _hallsSpinnerAdapter;
+    private ArrayAdapter<MovieDetails> _moviesSpinnerAdapter;
 
-    @BindView(R.id.sp_movie)
-    Spinner _moviesSpinner;
-    @BindView(R.id.sp_hall)
+    // Expandable Views
+    @BindView(R.id.expl_add_screening)
+    ExpandableLayout _addScreeningLayout;
+    @BindView(R.id.expl_delete_screening)
+    ExpandableLayout _deleteScreeningLayout;
+
+    // Views
+    @BindView(R.id.sp_movies_for_delete)
+    Spinner _deleteMoviesSpinner;
+    @BindView(R.id.sp_movies_for_add)
+    Spinner _addMoviesSpinner;
+    @BindView(R.id.sp_halls)
     Spinner _hallsSpinner;
+    @BindView(R.id.sp_screenings)
+    Spinner _screeningsSpinner;
     @BindView(R.id.til_screening_date) @NotEmpty(messageResId = R.string.empty_field_error)
     TextInputLayout _screeningDateView;
     @BindView(R.id.til_screening_time) @NotEmpty(messageResId = R.string.empty_field_error)
     TextInputLayout _screeningTimeView;
     @BindView(R.id.til_screening_price) @NotEmpty(messageResId = R.string.empty_field_error) @Pattern(regex = "[0-9]{1,3}", messageResId = R.string.price_field_error)
     TextInputLayout _priceView;
+    private ArrayAdapter<Screening> _screeningsSpinnerAdapter;
 
 
     public static Fragment newInstance()
     {
-        return new AddScreeningFragment();
+        return new ManageScreeningFragment();
     }
 
     @Override
@@ -79,13 +103,28 @@ public class AddScreeningFragment extends Fragment implements Validator.Validati
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.fragment_add_screening, container, false);
+        View v = inflater.inflate(R.layout.fragment_management_screening, container, false);
         ButterKnife.bind(this, v);
 
         // Setting fields validator
         _validator = new Validator(this);
         _validator.setValidationListener(this);
         _validator.registerAdapter(TextInputLayout.class, new TextInputLayoutDataAdapter());
+
+        _deleteMoviesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                OnMoviesForScreeningDeletionClicked();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
 
         LoadValuesFromServer();
 
@@ -102,9 +141,10 @@ public class AddScreeningFragment extends Fragment implements Validator.Validati
                     if (throwable == null)
                     {
                         _moviesList = movieDetails;
-                        ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, _moviesList);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        _moviesSpinner.setAdapter(adapter);
+                        _moviesSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, _moviesList);
+                        _moviesSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        _addMoviesSpinner.setAdapter(_moviesSpinnerAdapter);
+                        _deleteMoviesSpinner.setAdapter(_moviesSpinnerAdapter);
                     }
                 });
 
@@ -116,9 +156,9 @@ public class AddScreeningFragment extends Fragment implements Validator.Validati
                     if (throwable == null)
                     {
                         _hallsList = halls;
-                        ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, _hallsList);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        _hallsSpinner.setAdapter(adapter);
+                        _hallsSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, _hallsList);
+                        _hallsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        _hallsSpinner.setAdapter(_hallsSpinnerAdapter);
                     }
                 });
     }
@@ -179,6 +219,54 @@ public class AddScreeningFragment extends Fragment implements Validator.Validati
         _validator.validate();
     }
 
+    @OnClick(R.id.btn_delete_screening)
+    public void OnDeleteScreeningClicked()
+    {
+        if (_screeningsSpinner.getAdapter().getCount() == 0)
+        {
+            Snackbar.make(getView(), "No screenings to delete", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        MoviesServiceFactory.GetInstance().DeleteScreening(((Screening)_screeningsSpinner.getSelectedItem()).Id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((responseBody, throwable) ->
+                {
+                    if (throwable != null)
+                    {
+                        Snackbar snack = Snackbar.make(getView(), R.string.failed_deleting_screening, Snackbar.LENGTH_LONG);
+                        snack.setAction(R.string.retry, v -> OnDeleteScreeningClicked());
+                        snack.show();
+                    }
+                    else
+                    {
+                        Snackbar.make(getView(), R.string.operation_success_delete_screening, Snackbar.LENGTH_LONG).show();
+                        ClearAll();
+
+                        _screeningsSpinnerAdapter.remove((Screening)_screeningsSpinner.getSelectedItem());
+                        _screeningsSpinnerAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    public void OnMoviesForScreeningDeletionClicked()
+    {
+        MoviesServiceFactory.GetInstance().GetMovieScreenings(((MovieDetails)_deleteMoviesSpinner.getSelectedItem()).Id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((screenings, throwable) -> {
+                    // If everything is ok
+                    if (throwable == null)
+                    {
+                        _screeningsForMovie = screenings;
+                        _screeningsSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, _screeningsForMovie);
+                        _screeningsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        _screeningsSpinner.setAdapter(_screeningsSpinnerAdapter);
+                    }
+                });
+    }
+
     @Override
     public void onValidationSucceeded()
     {
@@ -225,7 +313,7 @@ public class AddScreeningFragment extends Fragment implements Validator.Validati
     private Screening ConstructScreeningObject()
     {
         return new Screening(
-                ((MovieDetails) _moviesSpinner.getSelectedItem()).Id,
+                ((MovieDetails) _addMoviesSpinner.getSelectedItem()).Id,
                 _screeningDateTime,
                 ((Hall) _hallsSpinner.getSelectedItem()).HallId,
                 Integer.parseInt(_priceView.getEditText().getText().toString()),
@@ -250,6 +338,37 @@ public class AddScreeningFragment extends Fragment implements Validator.Validati
         }
 
         Snackbar.make(getView(), R.string.illegal_fields, Snackbar.LENGTH_LONG).show();
+    }
+
+    @OnClick(R.id.btn_toggle)
+    public void OnToggleButtonClicked()
+    {
+        _addScreeningLayout.toggle();
+        _deleteScreeningLayout.toggle();
+    }
+
+    @Override
+    public void PassData(Object... objects) throws Exception
+    {
+        if (objects[0] instanceof List)
+        {
+            List lst = ((List)objects[0]);
+            if (lst.size() > 0)
+            {
+                if (lst.get(0) instanceof MovieDetails)
+                {
+                    _moviesList = (List<MovieDetails>) objects[0];
+                    _moviesSpinnerAdapter.clear();
+                    _moviesSpinnerAdapter.addAll(_moviesList);
+                }
+                else if (lst.get(0) instanceof Hall)
+                {
+                    _hallsList = (List<Hall>) objects[0];
+                    _hallsSpinnerAdapter.clear();
+                    _hallsSpinnerAdapter.addAll(_hallsList);
+                }
+            }
+        }
     }
 }
 

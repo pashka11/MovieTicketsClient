@@ -2,22 +2,25 @@ package com.javaproject.nimrod.cinema;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import com.javaproject.nimrod.cinema.Interfaces.HallsChangedListener;
 import com.javaproject.nimrod.cinema.Objects.Hall;
 import com.javaproject.nimrod.cinema.Validation.TextInputLayoutDataAdapter;
 import com.javaproject.nimrod.cinema.WebInterfaces.MoviesServiceFactory;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Digits;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
+
+import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.List;
 
@@ -31,10 +34,18 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Nimrod on 17/08/2017.
  */
 
-public class AddHallFragment extends Fragment implements Validator.ValidationListener
+public class ManageHallFragment extends Fragment implements Validator.ValidationListener
 {
     private Validator _validator;
     private List<Hall> _hallsList;
+    // Changes listener
+    private static HallsChangedListener _hallsChangedListener;
+
+    // Expandable Views
+    @BindView(R.id.expl_add_hall)
+    ExpandableLayout _addHallLayout;
+    @BindView(R.id.expl_delete_hall)
+    ExpandableLayout _deletHallLayout;
 
     @BindView(R.id.til_hall_id) @NotEmpty(messageResId = R.string.empty_field_error)
     TextInputLayout _hallIdView;
@@ -42,10 +53,15 @@ public class AddHallFragment extends Fragment implements Validator.ValidationLis
     TextInputLayout _rowsCountView;
     @BindView(R.id.til_hall_seats_in_row) @NotEmpty(messageResId = R.string.empty_field_error) @Pattern(regex = "30|[1-2][0-9]|[5-9]", messageResId = R.string.row_col_count_field_error)
     TextInputLayout _seatsCountView;
+    @BindView(R.id.sp_halls)
+    Spinner _hallsSpinner;
+    private ArrayAdapter<Hall> _hallsSpinnerAdapter;
 
-    public static Fragment newInstance()
+    public static Fragment newInstance(HallsChangedListener hallsChangedListener)
     {
-        return new AddHallFragment();
+        _hallsChangedListener = hallsChangedListener;
+
+        return new ManageHallFragment();
     }
 
 
@@ -53,7 +69,7 @@ public class AddHallFragment extends Fragment implements Validator.ValidationLis
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.fragment_add_hall, container, false);
+        View v = inflater.inflate(R.layout.fragment_management_hall, container, false);
         ButterKnife.bind(this, v);
 
         // Setting fields validator
@@ -61,15 +77,66 @@ public class AddHallFragment extends Fragment implements Validator.ValidationLis
         _validator.setValidationListener(this);
         _validator.registerAdapter(TextInputLayout.class, new TextInputLayoutDataAdapter());
 
-        //LoadValuesFromServer();
+        LoadHalls();
 
         return v;
+    }
+
+    private void LoadHalls()
+    {
+        MoviesServiceFactory.GetInstance().GetHalls()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((halls, throwable) -> {
+                    // If everything is ok
+                    if (throwable == null)
+                    {
+                        _hallsList = halls;
+                        _hallsSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, _hallsList);
+                        _hallsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        _hallsSpinner.setAdapter(_hallsSpinnerAdapter);
+                    }
+                });
     }
 
     @OnClick(R.id.btn_add_hall)
     public void OnAddHallClicked()
     {
         _validator.validate();
+    }
+
+    @OnClick(R.id.btn_delete_hall)
+    public void OnDeleteHallClicked()
+    {
+        if (_hallsSpinnerAdapter.getCount() == 0)
+        {
+            Snackbar.make(getView(), "No movies to delete", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        MoviesServiceFactory.GetInstance().DeleteHall(((Hall)_hallsSpinner.getSelectedItem()).HallId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((responseBody, throwable) ->
+                {
+                    if (throwable != null)
+                    {
+                        Snackbar snack = Snackbar.make(getView(), R.string.failed_deleting_hall, Snackbar.LENGTH_LONG);
+                        snack.setAction(R.string.retry, v -> OnDeleteHallClicked());
+                        snack.show();
+                    }
+                    else
+                    {
+                        Snackbar.make(getView(), R.string.operation_success_delete_hall, Snackbar.LENGTH_LONG).show();
+                        ClearAll();
+
+                        Hall selectedItem = ((Hall)_hallsSpinner.getSelectedItem());
+
+                        _hallsSpinnerAdapter.remove(selectedItem);
+                        _hallsList.remove(selectedItem);
+                        _hallsChangedListener.HallsChanged(_hallsList);
+                    }
+                });
     }
 
     @Override
@@ -138,6 +205,13 @@ public class AddHallFragment extends Fragment implements Validator.ValidationLis
         }
 
         Snackbar.make(getView(), R.string.illegal_fields, Snackbar.LENGTH_LONG).show();
+    }
+
+    @OnClick(R.id.btn_toggle)
+    public void OnToggleButtonClicked()
+    {
+        _addHallLayout.toggle();
+        _deletHallLayout.toggle();
     }
 
 }

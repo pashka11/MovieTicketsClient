@@ -11,4 +11,6 @@
     <color name="image_border_start">#e86703</color>
     <color name="image_border_end">#918888</color>
     <color name="image_border_center">#b3de822c</color>
+
+    <color name="management_tabs">#ddd8d6</color>
 </resources>

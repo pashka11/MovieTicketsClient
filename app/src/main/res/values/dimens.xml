@@ -19,5 +19,9 @@
     <dimen name="purchase_details_field">16sp</dimen>
     <dimen name="add_item_details_field">16sp</dimen>
     <dimen name="movie_description_field">16sp</dimen>
+
+
     <dimen name="spinner_top_bottom_padding">10dp</dimen>"
+    <dimen name="input_label_vertical_spacing">8dp</dimen>
+    <dimen name="input_label_horizontal_spacing">4dp</dimen>
 </resources>

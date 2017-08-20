@@ -23,9 +23,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.javaproject.nimrod.cinema.Interfaces.MoviesChangedListener;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Validation.TextInputLayoutDataAdapter;
 import com.javaproject.nimrod.cinema.WebInterfaces.MoviesServiceFactory;
@@ -34,6 +37,8 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Future;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
+
+import net.cachapa.expandablelayout.ExpandableLayout;
 
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
@@ -60,9 +65,18 @@ import static android.app.Activity.RESULT_OK;
  * Created by Nimrod on 17/08/2017.
  */
 
-public class AddMovieFragment extends Fragment implements Validator.ValidationListener
+public class ManageMovieFragment extends Fragment implements Validator.ValidationListener
 {
-    // Add fields
+    private List<MovieDetails> _moviesList;
+    private static MoviesChangedListener _moviesChangedListener;
+
+    // Expandable Views
+    @BindView(R.id.expl_add_movie)
+    ExpandableLayout _addMovieLayout;
+    @BindView(R.id.expl_delete_movie)
+    ExpandableLayout _deleteMovieLayout;
+
+    // Layout fields
     @BindView(R.id.til_release_date) @NotEmpty(messageResId = R.string.empty_field_error) @Future(dateFormatResId = R.string.release_date_format)
     TextInputLayout _releaseDate;
     @BindView(R.id.til_movie_name) @NotEmpty(messageResId = R.string.empty_field_error)
@@ -80,23 +94,28 @@ public class AddMovieFragment extends Fragment implements Validator.ValidationLi
     @BindView(R.id.tv_imageName)
     @NotEmpty (message = "Image missing")
     TextView _imageName;
+    @BindView(R.id.sp_movies_for_add)
+    Spinner _moviesSpinner;
 
     private Validator _validator;
     private Bitmap _movieImage;
     private byte[] _selectedImageData;
     private boolean _wasImageUploaded;
+    private ArrayAdapter<MovieDetails> _moviesSpinnerAdapter;
 
 
-    public static Fragment newInstance()
+    public static Fragment newInstance(MoviesChangedListener moviesChangedListener)
     {
-        return new AddMovieFragment();
+        _moviesChangedListener = moviesChangedListener;
+
+        return new ManageMovieFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.fragment_add_movie, container, false);
+        View v = inflater.inflate(R.layout.fragment_management_movie, container, false);
         ButterKnife.bind(this, v);
 
         // Setting fields validator
@@ -104,7 +123,27 @@ public class AddMovieFragment extends Fragment implements Validator.ValidationLi
         _validator.setValidationListener(this);
         _validator.registerAdapter(TextInputLayout.class, new TextInputLayoutDataAdapter());
 
+        LoadMovies();
+
         return v;
+    }
+
+    public void LoadMovies()
+    {
+        MoviesServiceFactory.GetInstance().GetAllMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((movieDetails, throwable) -> {
+                    // If everything is ok
+                    if (throwable == null)
+                    {
+                        _moviesList = movieDetails;
+                        _moviesSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, movieDetails);
+                        _moviesSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                        _moviesSpinner.setAdapter(_moviesSpinnerAdapter);
+                    }
+                });
     }
 
     @OnClick(R.id.iv_choose_movie_picture)
@@ -183,7 +222,6 @@ public class AddMovieFragment extends Fragment implements Validator.ValidationLi
     }
 
     @OnFocusChange(R.id.tiet_release_date)
-    //@OnClick({R.id.tiet_release_date,R.id.til_release_date})
     public void OnChooseDateClicked(View v, boolean focusGained)
     {
         // Skip if were leaving the date field
@@ -204,6 +242,42 @@ public class AddMovieFragment extends Fragment implements Validator.ValidationLi
         datePicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         datePicker.show();
+    }
+
+    @OnClick(R.id.btn_delete_movie)
+    public void OnDeleteMovieClicked()
+    {
+        if (_moviesSpinnerAdapter.getCount() == 0)
+        {
+            Snackbar.make(getView(), "No movies to delete", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        MoviesServiceFactory.GetInstance().DeleteMovie(((MovieDetails)_moviesSpinner.getSelectedItem()).Id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((responseBody, throwable) ->
+                {
+                    if (throwable != null)
+                    {
+                        Snackbar snack = Snackbar.make(getView(), R.string.failed_deleting_movie, Snackbar.LENGTH_LONG);
+                        snack.setAction(R.string.retry, v -> OnDeleteMovieClicked());
+                        snack.show();
+                    }
+                    else
+                    {
+                        MovieDetails selectedItem = ((MovieDetails)_moviesSpinner.getSelectedItem());
+
+                        Snackbar.make(getView(),
+                                String.format(getString(R.string.operation_success_delete_movie), selectedItem.Name),
+                                Snackbar.LENGTH_LONG).show();
+                        ClearAll();
+
+                        _moviesSpinnerAdapter.remove(selectedItem);
+                        _moviesList.remove(selectedItem);
+                        _moviesChangedListener.MoviesChanged(_moviesList);
+                    }
+                });
     }
 
     @OnClick(R.id.btn_add_movie)
@@ -343,5 +417,13 @@ public class AddMovieFragment extends Fragment implements Validator.ValidationLi
         // Lose focus from everything
         getActivity().getCurrentFocus().clearFocus();
     }
+
+    @OnClick(R.id.btn_toggle)
+    public void OnToggleButtonClicked()
+    {
+        _addMovieLayout.toggle();
+        _deleteMovieLayout.toggle();
+    }
 }
+
 

@@ -36,5 +36,11 @@ public class Screening
     {
         this ("", movieId, screeningTime, hallId, price, seats);
     }
+
+    @Override
+    public String toString()
+    {
+        return Time.toString("dd/MM/yyyy, mm:HH");
+    }
 }
 

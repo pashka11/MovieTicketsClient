@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusableInTouchMode="true"
+    android:descendantFocusability="beforeDescendants"
+    android:background="@color/viewBg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/btn_toggle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/toggle_add_remove"
+            style="@style/myColoredButton"/>
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/expl_delete_screening"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:el_duration="500"
+            app:el_expanded="false"
+            app:el_parallax="0.5">
+            <include layout="@layout/delete_screening"/>
+        </net.cachapa.expandablelayout.ExpandableLayout>
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/expl_add_screening"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:el_duration="500"
+            app:el_expanded="true"
+            app:el_parallax="0.5">
+            <include layout="@layout/add_screening"/>
+        </net.cachapa.expandablelayout.ExpandableLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.javaproject.nimrod.cinema.Interfaces.DataReceiver;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Objects.Row;
 import com.javaproject.nimrod.cinema.Objects.Screening;
@@ -40,7 +41,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Nimrod on 24/06/2017.
  */
 
-public class SeatsSelectionFragment extends Fragment implements MainActivity.DataReceiver
+public class SeatsSelectionFragment extends Fragment implements DataReceiver
 {
     // Constants
     public enum SeatState
