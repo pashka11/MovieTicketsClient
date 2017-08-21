@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.javaproject.nimrod.cinema.Interfaces.HallsChangedListener;
+import com.javaproject.nimrod.cinema.DataInterfaces.HallsChangedListener;
 import com.javaproject.nimrod.cinema.Objects.Hall;
 import com.javaproject.nimrod.cinema.Validation.TextInputLayoutDataAdapter;
 import com.javaproject.nimrod.cinema.WebInterfaces.MoviesServiceFactory;

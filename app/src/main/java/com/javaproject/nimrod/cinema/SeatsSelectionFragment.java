@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.javaproject.nimrod.cinema.Interfaces.DataReceiver;
+import com.javaproject.nimrod.cinema.DataInterfaces.DataReceiver;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Objects.Row;
 import com.javaproject.nimrod.cinema.Objects.Screening;

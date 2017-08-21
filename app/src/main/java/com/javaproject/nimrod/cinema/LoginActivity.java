@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        setTitle("Login");
 
         // Setting fields validator
         _validator = new Validator(this);

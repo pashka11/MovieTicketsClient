@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -30,13 +29,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.javaproject.nimrod.cinema.Interfaces.MoviesChangedListener;
+import com.javaproject.nimrod.cinema.DataInterfaces.MoviesChangedListener;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Validation.TextInputLayoutDataAdapter;
 import com.javaproject.nimrod.cinema.WebInterfaces.MoviesServiceFactory;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Future;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 

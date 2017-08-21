@@ -8,7 +8,7 @@
     android:paddingRight="24dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView android:src="@drawable/ic_movie"
+    <ImageView android:src="@drawable/settings"
                android:layout_width="wrap_content"
                android:layout_height="72dp"
                android:layout_marginBottom="24dp"

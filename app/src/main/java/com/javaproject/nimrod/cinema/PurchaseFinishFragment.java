@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.javaproject.nimrod.cinema.Interfaces.DataReceiver;
+import com.javaproject.nimrod.cinema.DataInterfaces.DataReceiver;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Objects.PurchaseRequest;
 import com.javaproject.nimrod.cinema.Objects.Screening;

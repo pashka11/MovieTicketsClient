@@ -1,4 +1,4 @@
-package com.javaproject.nimrod.cinema.Interfaces;
+package com.javaproject.nimrod.cinema.DataInterfaces;
 
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 

@@ -10,9 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.javaproject.nimrod.cinema.Interfaces.DataReceiver;
-import com.javaproject.nimrod.cinema.Interfaces.HallsChangedListener;
-import com.javaproject.nimrod.cinema.Interfaces.MoviesChangedListener;
+import com.javaproject.nimrod.cinema.DataInterfaces.DataReceiver;
+import com.javaproject.nimrod.cinema.DataInterfaces.HallsChangedListener;
+import com.javaproject.nimrod.cinema.DataInterfaces.MoviesChangedListener;
 import com.javaproject.nimrod.cinema.Objects.Hall;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 
@@ -45,6 +45,8 @@ public class ManagementActivity extends AppCompatActivity implements MoviesChang
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_management);
         ButterKnife.bind(this);
+
+        setTitle("Management");
 
         _viewPagerAdapter = new ManagementFragmentsAdapter(getFragmentManager(), this, this);
         _viewPager.setAdapter(_viewPagerAdapter);

@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.javaproject.nimrod.cinema.Interfaces.DataReceiver;
+import com.javaproject.nimrod.cinema.DataInterfaces.DataReceiver;
 import com.javaproject.nimrod.cinema.Objects.Hall;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Objects.Screening;

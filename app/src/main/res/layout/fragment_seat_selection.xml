@@ -5,7 +5,7 @@
               android:orientation="vertical"
               android:background="@color/viewBg"
               android:gravity="center"
-    android:weightSum="1">
+    android:weightSum="1">ֺ
 
     <TextView
         android:id="@+id/tv_screening_summery"
