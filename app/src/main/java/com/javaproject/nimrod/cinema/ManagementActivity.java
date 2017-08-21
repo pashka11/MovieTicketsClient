@@ -52,8 +52,6 @@ public class ManagementActivity extends AppCompatActivity implements MoviesChang
         _tabLayout.setupWithViewPager(_viewPager);
     }
 
-
-
     public class ManagementFragmentsAdapter extends FragmentPagerAdapter
     {
         private final static int NUM_ITEMS = 3;

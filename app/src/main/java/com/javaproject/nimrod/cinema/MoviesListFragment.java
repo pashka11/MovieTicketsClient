@@ -177,10 +177,9 @@ public class MoviesListFragment extends Fragment implements MovieClickedListener
         super.onCreateOptionsMenu(menu, inflater);
 
         MenuItem searchItem = menu.findItem(R.id.menu_item_search);
-        SearchView searchView  = (SearchView) searchItem.getActionView();
+        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) searchItem.getActionView();
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-
+        searchView.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener()
         {
             @Override
             public boolean onQueryTextSubmit(String query)
@@ -201,8 +200,6 @@ public class MoviesListFragment extends Fragment implements MovieClickedListener
 
                 return false;
             }
-
-
         });
     }
 

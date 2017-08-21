@@ -40,7 +40,6 @@
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:inputType="textPersonName"
                         android:hint="@string/last_name"
-                        android:imeOptions="actionNext"
                         android:textSize="@dimen/purchase_details_field"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -56,7 +55,6 @@
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:hint="@string/given_name"
                         android:inputType="textPersonName"
-                        android:imeOptions="actionNext"
                         android:textSize="@dimen/purchase_details_field"/>
 
                 </android.support.design.widget.TextInputLayout>

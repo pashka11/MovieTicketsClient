@@ -6,13 +6,16 @@
 
     <item
         android:id="@+id/menu_item_search"
+        android:title="@string/movie_search"
         android:orderInCategory="0"
-        app:actionViewClass="android.widget.SearchView"
-        android:icon="@drawable/ic_search"
         app:showAsAction="always"
-        tools:ignore="AlwaysShowAction"
-        android:title="@string/movie_search">
-    </item>
+        app:actionViewClass="android.support.v7.widget.SearchView" />
+    <!---->
+    <!--<item-->
+
+    <!---->
+    <!--android:hint="@string/movie_search"/>-->
+    <!--&lt;!&ndash;android:icon="@drawable/ic_search"&ndash;&gt;-->
 
     <item
         android:id="@+id/next_action"

@@ -40,7 +40,7 @@ public class Screening
     @Override
     public String toString()
     {
-        return Time.toString("dd/MM/yyyy, mm:HH");
+        return Time.toString("dd/MM/yyyy, HH:mm") + ", Hall " + HallId;
     }
 }
 

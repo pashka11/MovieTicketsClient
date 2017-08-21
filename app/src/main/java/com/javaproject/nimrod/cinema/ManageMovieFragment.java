@@ -1,9 +1,11 @@
 package com.javaproject.nimrod.cinema;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -244,15 +246,8 @@ public class ManageMovieFragment extends Fragment implements Validator.Validatio
         datePicker.show();
     }
 
-    @OnClick(R.id.btn_delete_movie)
-    public void OnDeleteMovieClicked()
+    private void DeleteSelectedMovie()
     {
-        if (_moviesSpinnerAdapter.getCount() == 0)
-        {
-            Snackbar.make(getView(), "No movies to delete", Snackbar.LENGTH_LONG).show();
-            return;
-        }
-
         MoviesServiceFactory.GetInstance().DeleteMovie(((MovieDetails)_moviesSpinner.getSelectedItem()).Id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -274,10 +269,34 @@ public class ManageMovieFragment extends Fragment implements Validator.Validatio
                         ClearAll();
 
                         _moviesSpinnerAdapter.remove(selectedItem);
+                        _moviesSpinnerAdapter.notifyDataSetChanged();
                         _moviesList.remove(selectedItem);
                         _moviesChangedListener.MoviesChanged(_moviesList);
                     }
                 });
+    }
+
+    @OnClick(R.id.btn_delete_movie)
+    public void OnDeleteMovieClicked()
+    {
+        if (_moviesSpinnerAdapter.getCount() == 0)
+        {
+            Snackbar.make(getView(), "No movies to delete", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle("Delete");
+        alert.setMessage(R.string.movie_delete_confirmation);
+        alert.setPositiveButton("Yes", (dialog, which) ->
+        {
+            DeleteSelectedMovie();
+            dialog.dismiss();
+        });
+
+        alert.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+
+        alert.show();
     }
 
     @OnClick(R.id.btn_add_movie)
@@ -289,15 +308,25 @@ public class ManageMovieFragment extends Fragment implements Validator.Validatio
             Snackbar.make(getView(), "Image did not upload yet", Snackbar.LENGTH_LONG).show();
     }
 
+    /**
+     * When validation on adding a movie fields passed
+     */
     @Override
     public void onValidationSucceeded()
+    {
+        ClearErrorOnAllFields();
+
+        AddMovie();
+    }
+
+    private void AddMovie()
     {
         MovieDetails movie = CreateMovieDetails();
 
         MoviesServiceFactory.GetInstance().AddMovie(movie)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((responseBody, throwable) -> {
+                .subscribe((movieId, throwable) -> {
 
                     if (throwable != null)
                     {
@@ -309,6 +338,16 @@ public class ManageMovieFragment extends Fragment implements Validator.Validatio
                     {
                         Snackbar.make(getView(), R.string.operation_success_add_movie, Snackbar.LENGTH_LONG).show();
                         ClearAll();
+
+                        // Add the new movie to all the lists and notify everyone for changes
+                        movie.Id = movieId;
+
+                        // Adding the movie to the list, THIS IS THE SPINNERS DATA so we dont have to add to adapter too.
+                        _moviesList.add(movie);
+
+                        // Notify other fragments and ourselves
+                        _moviesSpinnerAdapter.notifyDataSetChanged();
+                        _moviesChangedListener.MoviesChanged(_moviesList);
                     }
                 });
     }
@@ -413,6 +452,7 @@ public class ManageMovieFragment extends Fragment implements Validator.Validatio
         _imageName.setText("");
         _selectedImageData = null;
         _genres.getEditText().setText("");
+        _description.getEditText().setText("");
 
         // Lose focus from everything
         getActivity().getCurrentFocus().clearFocus();

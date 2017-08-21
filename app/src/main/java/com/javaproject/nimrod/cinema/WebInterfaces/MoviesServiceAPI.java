@@ -5,6 +5,7 @@ import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Objects.PurchaseRequest;
 import com.javaproject.nimrod.cinema.Objects.Screening;
 import com.javaproject.nimrod.cinema.Objects.Seat;
+import com.javaproject.nimrod.cinema.Objects.User;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public interface MoviesServiceAPI
     Call<MovieDetails> GetMovie(@Path(WebApiConstants.Movies.MovieId) String id);
 
     @POST(WebApiConstants.Movies.RelativeUrl)
-    Single<ResponseBody> AddMovie(@Body MovieDetails movie);
+    Single<String> AddMovie(@Body MovieDetails movie);
 
     @DELETE(WebApiConstants.Movies.SpecificMovie)
     Single<ResponseBody> DeleteMovie(@Path(WebApiConstants.Movies.MovieId) String movieId);
@@ -75,4 +76,7 @@ public interface MoviesServiceAPI
 
     @DELETE(WebApiConstants.Halls.SpecificHall)
     Single<ResponseBody> DeleteHall(@Path(WebApiConstants.Halls.HallId) String hallId);
+
+    @POST(WebApiConstants.Users.RelativeUrl)
+    Single<User> ValidateUser(@Body User user);
 }

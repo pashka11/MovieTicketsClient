@@ -1,5 +1,6 @@
 package com.javaproject.nimrod.cinema;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -110,10 +111,26 @@ public class ManageHallFragment extends Fragment implements Validator.Validation
     {
         if (_hallsSpinnerAdapter.getCount() == 0)
         {
-            Snackbar.make(getView(), "No movies to delete", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(getView(), "No halls to delete", Snackbar.LENGTH_LONG).show();
             return;
         }
 
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle("Delete");
+        alert.setMessage(R.string.hall_delete_confirmation);
+        alert.setPositiveButton("Yes", (dialog, which) ->
+        {
+            DeleteSelectedHall();
+            dialog.dismiss();
+        });
+
+        alert.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+
+        alert.show();
+    }
+
+    private void DeleteSelectedHall()
+    {
         MoviesServiceFactory.GetInstance().DeleteHall(((Hall)_hallsSpinner.getSelectedItem()).HallId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -134,6 +151,8 @@ public class ManageHallFragment extends Fragment implements Validator.Validation
 
                         _hallsSpinnerAdapter.remove(selectedItem);
                         _hallsList.remove(selectedItem);
+
+                        _hallsSpinnerAdapter.notifyDataSetChanged();
                         _hallsChangedListener.HallsChanged(_hallsList);
                     }
                 });
@@ -141,6 +160,13 @@ public class ManageHallFragment extends Fragment implements Validator.Validation
 
     @Override
     public void onValidationSucceeded()
+    {
+        ClearErrorOnAllFields();
+
+        AddHall();
+    }
+
+    private void AddHall()
     {
         Hall hall = ConstructHallObject();
 
@@ -158,6 +184,16 @@ public class ManageHallFragment extends Fragment implements Validator.Validation
                     {
                         Snackbar.make(getView(), R.string.operation_success_add_hall, Snackbar.LENGTH_LONG).show();
                         ClearAll();
+
+                        // Add the new hall to all the lists and notify everyone for changes
+                        hall.HallId = s;
+
+                        // Adding the hall only here! THIS IS THE SPINNERS DATA!!!
+                        _hallsList.add(hall);
+
+                        // Notify other fragments and ourselves
+                        _hallsSpinnerAdapter.notifyDataSetChanged();
+                        _hallsChangedListener.HallsChanged(_hallsList);
                     }
                 });
     }

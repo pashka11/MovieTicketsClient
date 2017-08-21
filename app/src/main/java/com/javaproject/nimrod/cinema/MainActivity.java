@@ -8,11 +8,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.SearchView;
 
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Objects.MovieDisplay;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
             }
             case R.id.admin_action:
             {
-                Intent intent = new Intent(this, ManagementActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -90,11 +90,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
+            // TODO : Ask the current fragment to handle the back press and then pop
             getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
     }
+
+    // TODO: set here another function like backpressed but one that doesnt get called by the back button, call this when we really wanna go back.
 
     public void CloseAllFragments()
     {

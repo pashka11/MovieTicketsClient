@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.javaproject.nimrod.cinema.Interfaces.DataReceiver;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
@@ -200,10 +199,10 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
             if (view instanceof TextInputLayout)
                 ((TextInputLayout) view).setError(message);
             else
-                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         }
 
-        Toast.makeText(getContext(), R.string.illegal_fields, Toast.LENGTH_LONG).show();
+        Snackbar.make(getView(), R.string.illegal_fields, Snackbar.LENGTH_LONG).show();
     }
 
     private void ClearErrorOnAllFields()

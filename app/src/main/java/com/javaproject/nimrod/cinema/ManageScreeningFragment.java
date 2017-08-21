@@ -1,5 +1,6 @@
 package com.javaproject.nimrod.cinema;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
@@ -19,8 +20,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.javaproject.nimrod.cinema.Interfaces.DataReceiver;
-import com.javaproject.nimrod.cinema.Interfaces.HallsChangedListener;
-import com.javaproject.nimrod.cinema.Interfaces.MoviesChangedListener;
 import com.javaproject.nimrod.cinema.Objects.Hall;
 import com.javaproject.nimrod.cinema.Objects.MovieDetails;
 import com.javaproject.nimrod.cinema.Objects.Screening;
@@ -111,12 +110,14 @@ public class ManageScreeningFragment extends Fragment implements Validator.Valid
         _validator.setValidationListener(this);
         _validator.registerAdapter(TextInputLayout.class, new TextInputLayoutDataAdapter());
 
+        _screeningDateTime = new LocalDateTime(1991,12,31,14,0);
+
         _deleteMoviesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                OnMoviesForScreeningDeletionClicked();
+                OnDeleteScreeningMovieSelected();
             }
 
             @Override
@@ -177,7 +178,7 @@ public class ManageScreeningFragment extends Fragment implements Validator.Valid
         DatePickerDialog datePicker = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,(view, year, month, dayOfMonth) ->
         {
             _screeningDateView.getEditText().setText(String.format("%02d/%02d/%d", dayOfMonth, month + 1, year));
-            _screeningDateTime = new LocalDateTime(year, month, dayOfMonth, 0, 0);
+            _screeningDateTime = _screeningDateTime.withDate(year, month + 1, dayOfMonth);
         },
                 now.get(Calendar.YEAR),
                 now.get(Calendar.MONTH),
@@ -228,6 +229,24 @@ public class ManageScreeningFragment extends Fragment implements Validator.Valid
             return;
         }
 
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle("Delete");
+        alert.setMessage(R.string.screening_delete_confirmation);
+        alert.setPositiveButton("Yes", (dialog, which) ->
+        {
+            DeleteSelectedScreening();
+            dialog.dismiss();
+        });
+
+        alert.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+
+        alert.show();
+
+
+    }
+
+    private void DeleteSelectedScreening()
+    {
         MoviesServiceFactory.GetInstance().DeleteScreening(((Screening)_screeningsSpinner.getSelectedItem()).Id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -250,7 +269,7 @@ public class ManageScreeningFragment extends Fragment implements Validator.Valid
                 });
     }
 
-    public void OnMoviesForScreeningDeletionClicked()
+    private void OnDeleteScreeningMovieSelected()
     {
         MoviesServiceFactory.GetInstance().GetMovieScreenings(((MovieDetails)_deleteMoviesSpinner.getSelectedItem()).Id)
                 .subscribeOn(Schedulers.io())
@@ -269,6 +288,11 @@ public class ManageScreeningFragment extends Fragment implements Validator.Valid
 
     @Override
     public void onValidationSucceeded()
+    {
+        AddMovie();
+    }
+
+    private void AddMovie()
     {
         Screening screening = ConstructScreeningObject();
 
@@ -366,6 +390,9 @@ public class ManageScreeningFragment extends Fragment implements Validator.Valid
                     _hallsList = (List<Hall>) objects[0];
                     _hallsSpinnerAdapter.clear();
                     _hallsSpinnerAdapter.addAll(_hallsList);
+
+                    // Update the screening for the currently displayed movie for deletion
+                    OnDeleteScreeningMovieSelected();
                 }
             }
         }

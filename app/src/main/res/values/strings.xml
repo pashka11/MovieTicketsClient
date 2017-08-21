@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Cinegans</string>
-    <string name="mainTitle">Welcome to Gans Cinema</string>
+    <string name="app_name">NimPashCinema</string>
+    <string name="mainTitle">Welcome to NimPash Cinema</string>
+
     <string name="management_action">Management</string>
     <string name="refresh_action">Refresh</string>
     <string name="next_action">Next</string>
@@ -65,6 +66,7 @@
     <string name="release_date_hint">Release Year</string>
     <string name="genres_hint">Genres</string>
     <string name="description_hint">Description</string>
+    <string name="movie_delete_confirmation">Are you sure you want to delete?  Warning! Related screenings will be removed!</string>
 
     // Success
     <string name="operation_success_add_movie">Movie added successfully</string>
@@ -88,6 +90,7 @@
     <string name="add_screening_btn">Add Screening</string>
     <string name="release_date_format">dd/MM/yyyy</string>
     <string name="delete_screening_btn">Delete Screening</string>
+    <string name="screening_delete_confirmation">Are you sure you want to delete?</string>
 
     // Success
     <string name="operation_success_add_screening">Screening added successfully</string>
@@ -108,6 +111,7 @@
     <string name="hall_id_hint">Hall Number</string>
     <string name="seat_count_hint">Seats Count</string>
     <string name="rows_count_hint">Rows Count</string>
+    <string name="hall_delete_confirmation">Are you sure you want to delete?  Warning! Related screenings will be removed!</string>
 
     // Success
     <string name="operation_success_add_hall">Hall created successfully</string>
@@ -118,6 +122,10 @@
     <string name="row_col_count_field_error">Should be a value between 5 to 30</string>
     <string name="purchase_view_action">View Purchase</string>
     <string name="failed_deleting_hall">Failed deleting hall</string>
+    <string name="password_invalid_error">Password must be with numbers and letters</string>
+    <string name="login_user_hint">User</string>
+    <string name="login_password_hint">Password</string>
+
     /////////////////////////////////////////////////////////////////////
 
     <string-array name="Date_of_Screen">
