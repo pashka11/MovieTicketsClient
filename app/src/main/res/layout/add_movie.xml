@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:hint="@string/director_hint"
-                    android:inputType="textPersonName"
+                    android:inputType="textShortMessage"
                     android:imeOptions="actionNext"
                     android:textSize="@dimen/add_item_details_field"/>
 
