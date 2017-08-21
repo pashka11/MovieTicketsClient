@@ -220,8 +220,8 @@ public class SeatsSelectionFragment extends Fragment implements DataReceiver
         @Override
         public View getView(int position, View convertView, ViewGroup parent)
         {
-            if (convertView != null)
-                return convertView;
+//            if (convertView != null)
+//                return convertView;
 
             int rowNum = CalcRowFromPosition(position);
             int seatNum = CalcSeatInRowFromPosition(position);

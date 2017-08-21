@@ -6,7 +6,7 @@ package com.javaproject.nimrod.cinema.WebInterfaces;
 
 public final class WebApiConstants
 {
-    public final static String BaseUrl = "http://93.172.157.231:8085/api/";
+    public final static String BaseUrl = "http://10.100.102.13:8085/api/";
 
     public final class Movies
     {

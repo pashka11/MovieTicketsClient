@@ -91,7 +91,10 @@ public class MoviesListFragment extends Fragment implements MovieClickedListener
     public void LoadMoviesList(boolean forceLoad)
     {
         if (forceLoad || _movieDisplays == null)
-            MoviesServiceFactory.GetInstance().GetAllMovies().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).doOnSubscribe(
+            MoviesServiceFactory.GetInstance().GetAllMovies()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .doOnSubscribe(
                     disposable ->
                     {
                         _progressBar.setVisibility(View.VISIBLE);

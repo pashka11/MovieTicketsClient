@@ -4,29 +4,45 @@
               xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:background="@color/viewBg"
-              android:gravity="center">
+              android:gravity="center"
+    android:weightSum="1">
+
     <TextView
         android:id="@+id/tv_screening_summery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:gravity="center"
         android:textAlignment="center"
         android:paddingBottom="10dp"
-        android:paddingTop="10dp"/>
-
+        android:paddingTop="10dp"
+        android:layout_weight="0"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="screen"
+        android:gravity="center"
+        android:background="@drawable/border"/>
+    </LinearLayout>
     <ProgressBar
         android:layout_gravity="center"
         android:id="@+id/pb_seats"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:layout_weight="0"/>
 
     <GridView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/gv_seats"
-        android:gravity="center_horizontal"
+        android:gravity="center_horizontal|bottom"
+        android:layout_gravity="bottom"
         android:listSelector="@android:color/transparent"
-        android:paddingStart="15dp"/>
+        android:paddingStart="15dp"
+        android:layout_weight="1"/>
 </LinearLayout>

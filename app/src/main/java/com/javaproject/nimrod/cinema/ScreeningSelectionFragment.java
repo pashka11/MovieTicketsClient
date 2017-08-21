@@ -132,7 +132,7 @@ public class ScreeningSelectionFragment extends Fragment implements DatePickerDi
 
     private void LoadScreenings()
     {
-        MoviesServiceFactory.GetInstance().GetMovieScreenings(m_displayedMovie.Id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        MoviesServiceFactory.GetInstance().GetMovieScreenings(m_displayedMovie.Id, true).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe((screenings, throwable) ->
                 {
                     if (screenings != null)

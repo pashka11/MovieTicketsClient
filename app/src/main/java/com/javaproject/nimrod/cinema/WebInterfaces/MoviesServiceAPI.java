@@ -8,6 +8,7 @@ import com.javaproject.nimrod.cinema.Objects.Seat;
 import com.javaproject.nimrod.cinema.Objects.User;
 
 import java.util.List;
+import java.util.jar.Attributes;
 
 import io.reactivex.Single;
 import okhttp3.MultipartBody;
@@ -23,6 +24,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by Nimrod on 15/06/2017.
@@ -46,7 +48,7 @@ public interface MoviesServiceAPI
     Call<ResponseBody> GetMoviePicture(@Path(WebApiConstants.Images.ImageName) String name);
 
     @GET(WebApiConstants.Movies.GetMovieScreenings)
-    Single<List<Screening>> GetMovieScreenings(@Path(WebApiConstants.Movies.MovieId) String id);
+    Single<List<Screening>> GetMovieScreenings(@Path(WebApiConstants.Movies.MovieId) String id, @Query("future") boolean futureScreening);
 
     @POST(WebApiConstants.Screenings.SaveSeats)
     Single<String> SaveSelectedSeats(@Path(WebApiConstants.Screenings.ScreeningId) String screeningId, @Body List<Seat> seats);

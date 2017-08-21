@@ -110,7 +110,7 @@ public class MoviesListAdapter extends android.support.v7.widget.RecyclerView.Ad
         @OnClick({R.id.card_view, R.id.iv_movie_image_preview, R.id.tv_movie_desc_preview})
         public void OnChooseMovieClicked()
         {
-            m_listener.OnMovieItemClicked(_moviesList.get(getAdapterPosition()));
+            m_listener.OnMovieItemClicked(_displayedMovies.get(getAdapterPosition()));
         }
 
         public void bind(final MovieDisplay movie)

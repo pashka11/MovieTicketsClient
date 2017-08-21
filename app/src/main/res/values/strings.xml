@@ -42,7 +42,7 @@
     <string name="selected_screening">Selected Screening: %s</string>
     <string name="description_format">Description: %s</string>
     <string name="search_hint">Movie Search</string>
-    <string name="purchase_approval_text">Order Number: %s Please save this order number   A purchase summery will be sent to the following email:  %s</string>
+    <string name="purchase_approval_text">Order Number: %s\n Purchase summery sent to:\n%s</string>
     <string name="movie_search">Movie Search</string>
     <string name="add_movie_btn">Add Movie</string>
     <string name="delete_movie_btn">Delete Movie</string>

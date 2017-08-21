@@ -79,7 +79,7 @@ public class ManageMovieFragment extends Fragment implements Validator.Validatio
     ExpandableLayout _deleteMovieLayout;
 
     // Layout fields
-    @BindView(R.id.til_release_date) @NotEmpty(messageResId = R.string.empty_field_error) @Future(dateFormatResId = R.string.release_date_format)
+    @BindView(R.id.til_release_date) @NotEmpty(messageResId = R.string.empty_field_error)
     TextInputLayout _releaseDate;
     @BindView(R.id.til_movie_name) @NotEmpty(messageResId = R.string.empty_field_error)
     TextInputLayout _movieName;

@@ -271,7 +271,7 @@ public class ManageScreeningFragment extends Fragment implements Validator.Valid
 
     private void OnDeleteScreeningMovieSelected()
     {
-        MoviesServiceFactory.GetInstance().GetMovieScreenings(((MovieDetails)_deleteMoviesSpinner.getSelectedItem()).Id)
+        MoviesServiceFactory.GetInstance().GetMovieScreenings(((MovieDetails)_deleteMoviesSpinner.getSelectedItem()).Id, false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((screenings, throwable) -> {
