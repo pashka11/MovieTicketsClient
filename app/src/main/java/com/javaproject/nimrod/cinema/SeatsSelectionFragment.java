@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,8 +66,8 @@ public class SeatsSelectionFragment extends Fragment implements DataReceiver
     @BindView(R.id.pb_seats) ProgressBar _progressBar;
     @BindView(R.id.tv_screening_summery) TextView _screeningSummeryView;
     @BindView(R.id.gv_seats) GridView _seatsView;
+    @BindView(R.id.ll_screen) LinearLayout _screen;
 
-    private String _seatSelectionId;
     private Screening _selectedScreening;
     private MovieDetails _chosenMovie;
     private ArrayList<Row> _seats;
@@ -98,6 +100,7 @@ public class SeatsSelectionFragment extends Fragment implements DataReceiver
         return v;
     }
 
+    // Sets all the previously selected seats back to free
     private void InitSeatsSelection()
     {
         if (_seats != null)
@@ -109,6 +112,7 @@ public class SeatsSelectionFragment extends Fragment implements DataReceiver
             });
     }
 
+    // When a seat was chosen
     @OnItemClick(R.id.gv_seats)
     void SeatClicked(AdapterView<?> parent, View view, int position, long id)
     {
@@ -298,11 +302,18 @@ public class SeatsSelectionFragment extends Fragment implements DataReceiver
         // Create seats list from seats matrix
         List<Seat> selectedSeats = new ArrayList<>();
 
+        // Collect the chosen seats
         for (int row = 0; row < _seats.size(); row++)
             for (int seat = 0; seat < _seats.get(row).Seats.size(); seat++)
                 if (_seats.get(row).Seats.get(seat) == SeatState.Chosen.getValue())
                     selectedSeats.add(new Seat(row, seat));
 
+        // If the user didn't select any seat
+        if (selectedSeats.size() == 0)
+        {
+            Snackbar.make(getView(), "No seats were selected", Snackbar.LENGTH_LONG).show();
+            return;
+        }
 
         // Start save seats request
         MoviesServiceFactory.GetInstance().SaveSelectedSeats(_selectedScreening.Id, selectedSeats)
@@ -311,6 +322,7 @@ public class SeatsSelectionFragment extends Fragment implements DataReceiver
                 .doOnSubscribe(disposable ->
                 {
                     _seatsView.setVisibility(View.GONE);
+                    _screen.setVisibility(View.GONE);
                     _screeningSummeryView.setVisibility(View.GONE);
                     _progressBar.setVisibility(View.VISIBLE);
                 })
@@ -318,16 +330,15 @@ public class SeatsSelectionFragment extends Fragment implements DataReceiver
                 {
                     _progressBar.setVisibility(View.GONE);
 
+                    // If the seats selection failed (seats are occupied or db error)
                     if (!TextUtils.isEmpty(selectionId))
                     {
-                        _seatSelectionId = selectionId;
                         ((MainActivity) getActivity()).ShowPurchaseDetailsFragment(selectedSeats, selectionId);
                     }
                     else
-                    {
-                        Toast.makeText(getContext(), "Failed saving seats", Toast.LENGTH_SHORT).show();
-                    }
+                        Snackbar.make(getView(), "Failed saving seats", Snackbar.LENGTH_LONG).show();
 
+                    _screen.setVisibility(View.VISIBLE);
                     _seatsView.setVisibility(View.VISIBLE);
                     _screeningSummeryView.setVisibility(View.VISIBLE);
                 });

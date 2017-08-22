@@ -129,6 +129,9 @@ public class ManageHallFragment extends Fragment implements Validator.Validation
         alert.show();
     }
 
+    /**
+     * Delete the selected hall
+     */
     private void DeleteSelectedHall()
     {
         MoviesServiceFactory.GetInstance().DeleteHall(((Hall)_hallsSpinner.getSelectedItem()).HallId)
@@ -166,6 +169,9 @@ public class ManageHallFragment extends Fragment implements Validator.Validation
         AddHall();
     }
 
+    /**
+     * Add hall, ask the server to create a new hall
+     */
     private void AddHall()
     {
         Hall hall = ConstructHallObject();
@@ -198,6 +204,9 @@ public class ManageHallFragment extends Fragment implements Validator.Validation
                 });
     }
 
+    /**
+     * Clear error on all view fields
+     */
     private void ClearErrorOnAllFields()
     {
         _hallIdView.setError(null);
@@ -208,6 +217,9 @@ public class ManageHallFragment extends Fragment implements Validator.Validation
         _seatsCountView.setErrorEnabled(false);
     }
 
+    /**
+     * Clear data from all fields
+     */
     private void ClearAll()
     {
         _hallIdView.getEditText().setText("");
@@ -218,6 +230,10 @@ public class ManageHallFragment extends Fragment implements Validator.Validation
         getActivity().getCurrentFocus().clearFocus();
     }
 
+    /**
+     * Create hall object from view objects
+     * @return
+     */
     private Hall ConstructHallObject()
     {
         return new Hall(_hallIdView.getEditText().getText().toString(),

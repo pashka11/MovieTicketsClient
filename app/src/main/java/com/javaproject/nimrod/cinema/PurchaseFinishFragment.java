@@ -1,6 +1,9 @@
 package com.javaproject.nimrod.cinema;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -95,6 +98,14 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
         setHasOptionsMenu(true);
     }
 
+    /**
+     * Create a purchase summary from the given items
+     * @param movie
+     * @param scr
+     * @param selectedSeats
+     * @param price
+     * @return
+     */
     private String ConstructPurchaseSummery(MovieDetails movie, Screening scr, List<Seat> selectedSeats,int price)
     {
         StringBuilder builder = new StringBuilder();
@@ -131,20 +142,27 @@ public class PurchaseFinishFragment extends Fragment implements Validator.Valida
         request.ScreeningId = _selectedScreening.Id;
         request.SeatsSelectionId = _seatsSelectionId;
         request.TotalPrice = _totalPrice;
-        
+
+        final ProgressDialog progressDialog = new ProgressDialog(getContext(),
+                android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
+
         // Send server request and wait.
         MoviesServiceFactory.GetInstance().MakePurchase(request).
                 subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe((s, throwable) -> {
+                            progressDialog.dismiss();
+
                             if (s != null)
                                 ShowPurchaseCompletionDialog(s);
                             else
                                 Snackbar.make(getView(), "Failed making purchase", Snackbar.LENGTH_LONG).show();
                         }
                 );
-
-
     }
 
     private void ShowPurchaseCompletionDialog(String selectionId)

@@ -5,7 +5,7 @@
               android:orientation="vertical"
               android:background="@color/viewBg"
               android:gravity="center"
-    android:weightSum="1">ֺ
+              android:weightSum="1">ֺ
 
     <TextView
         android:id="@+id/tv_screening_summery"
@@ -18,15 +18,16 @@
         android:paddingTop="10dp"
         android:layout_weight="0"/>
     <LinearLayout
+        android:id="@+id/ll_screen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="screen"
-        android:gravity="center"
-        android:background="@drawable/border"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="screen"
+            android:gravity="center"
+            android:background="@drawable/border"/>
     </LinearLayout>
     <ProgressBar
         android:layout_gravity="center"
